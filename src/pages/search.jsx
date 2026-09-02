@@ -99,7 +99,7 @@ export default function SearchPage({ query }) {
     if (product_items.length === 0) {
       content = (
         <div className="text-center pt-80 pb-80">
-          <h3>Sorry, nothing matched <span style={{ color: '#0989FF' }}>"{searchText}"</span> search terms</h3>
+          <h3>Sorry, nothing matched <span style={{ color: '#0989FF' }}>&ldquo;{searchText}&rdquo;</span> search terms</h3>
           <p className="mt-10 text-muted">Try searching with broader keywords like <strong>headphone, watch, tablet, camera, charger, speaker</strong></p>
         </div>
       );
