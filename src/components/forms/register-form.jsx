@@ -11,12 +11,12 @@ import { useRegisterUserMutation } from "@/redux/features/auth/authApi";
 
 // schema
 const schema = Yup.object().shape({
-  name: Yup.string().required().label("Name"),
-  email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().min(6).label("Password"),
-  remember: Yup.bool()
-    .oneOf([true], "You must agree to the terms and conditions to proceed.")
-    .label("Terms and Conditions"),
+  name: Yup.string().required("Name is required!").label("Name"),
+  email: Yup.string().required("Email is required!").email("Invalid email address").label("Email"),
+  password: Yup.string().required("Password is required!").min(6, "Password must be at least 6 characters").label("Password"),
+  remember: Yup.boolean()
+    .test("is-agreed", "You must agree to the terms and conditions to proceed.", (val) => Boolean(val))
+    .required("You must agree to the terms and conditions to proceed."),
 });
 
 const RegisterForm = () => {
@@ -25,8 +25,20 @@ const RegisterForm = () => {
   const router = useRouter();
   const { redirect } = router.query;
   // react hook form
-  const {register,handleSubmit,formState: { errors },reset} = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      remember: false,
+    },
+    mode: "onChange",
   });
   // on submit
   const onSubmit = (data) => {
@@ -109,15 +121,13 @@ const RegisterForm = () => {
       <div className="tp-login-suggetions d-sm-flex align-items-center justify-content-between mb-20">
         <div className="tp-login-remeber">
           <input
-            {...register("remember", {
-              required: `Terms and Conditions is required!`,
-            })}
+            {...register("remember")}
             id="remember"
             name="remember"
             type="checkbox"
           />
           <label htmlFor="remember">
-            I accept the terms of the Service & <a href="#">Privacy Policy</a>.
+            I accept the terms of the Service & <a href="#" onClick={(e) => e.preventDefault()}>Privacy Policy</a>.
           </label>
           <ErrorMsg msg={errors.remember?.message} />
         </div>
