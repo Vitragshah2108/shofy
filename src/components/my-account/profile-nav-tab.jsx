@@ -1,4 +1,7 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import { userLoggedOut } from "@/redux/features/auth/authSlice";
 
 function SingleNav({ active = false, id, title, icon }) {
   return (
@@ -21,6 +24,14 @@ function SingleNav({ active = false, id, title, icon }) {
 }
 
 const ProfileNavTab = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    dispatch(userLoggedOut());
+    router.push("/login");
+  };
+
   return (
     <nav>
       <div
@@ -49,6 +60,16 @@ const ProfileNavTab = () => {
           title="Change Password"
           icon="fa-regular fa-lock"
         />
+        <button
+          onClick={handleLogout}
+          className="nav-link text-danger text-start mt-10"
+          type="button"
+        >
+          <span>
+            <i className="fa-regular fa-arrow-right-from-bracket"></i>
+          </span>
+          Logout
+        </button>
       </div>
     </nav>
   );

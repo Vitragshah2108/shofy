@@ -12,7 +12,7 @@ const NavProfileTab = ({ orderData }) => {
   // handle logout
   const handleLogout = () => {
     dispatch(userLoggedOut());
-    router.push('/')
+    router.push('/login');
   }
   return (
     <div className="profile__main">
