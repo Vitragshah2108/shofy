@@ -12,7 +12,7 @@
   color: #010f1c !important;
 
   &::placeholder {
-    font-size: 14px !important;
+    font-size: 15px !important;
     font-family: inherit !important;
     letter-spacing: normal !important;
     color: #8b9299 !important;
@@ -20,12 +20,16 @@
   }
 }
 
-input[type="password"] {
-  font-size: 15px !important;
+/* Password Input and Bullets */
+input[type="password"],
+.tp-login-input input[type="password"] {
+  font-size: 22px !important;
+  letter-spacing: 3px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
 
   &::placeholder {
-    font-size: 14px !important;
-    font-family: inherit !important;
+    font-size: 15px !important;
+    font-family: var(--tp-ff-body, "Outfit", sans-serif) !important;
     letter-spacing: normal !important;
     color: #8b9299 !important;
     opacity: 1 !important;
