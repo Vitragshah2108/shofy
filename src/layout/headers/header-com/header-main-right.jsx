@@ -7,11 +7,21 @@ import useCartInfo from "@/hooks/use-cart-info";
 import { CartTwo, Compare, Menu, User, Wishlist } from "@/svg";
 import { openCartMini } from "@/redux/features/cartSlice";
 
+import { useRouter } from "next/router";
+import { userLoggedOut } from "@/redux/features/auth/authSlice";
+
 const HeaderMainRight = ({ setIsCanvasOpen }) => {
   const { user: userInfo } = useSelector((state) => state.auth);
   const { wishlist } = useSelector((state) => state.wishlist);
   const { quantity } = useCartInfo();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    dispatch(userLoggedOut());
+    router.push("/login");
+  };
+
   return (
     <div className="tp-header-main-right d-flex align-items-center justify-content-end">
       <div className="tp-header-login d-none d-lg-block">
@@ -25,6 +35,7 @@ const HeaderMainRight = ({ setIsCanvasOpen }) => {
                     alt="user img"
                     width={35}
                     height={35}
+                    style={{ borderRadius: "50%" }}
                   />
                 </Link>
               ) : userInfo?.name ? (
@@ -45,9 +56,23 @@ const HeaderMainRight = ({ setIsCanvasOpen }) => {
               </Link>
             )}
             {userInfo?.name && <span>Hello, {userInfo?.name}</span>}
-            <div className="tp-header-login-title">
+            <div className="tp-header-login-title d-flex align-items-center gap-2">
               {!userInfo?.name && <Link href="/login">Sign In</Link>}
-              {userInfo?.name && <Link href="/profile">Your Account</Link>}
+              {userInfo?.name && (
+                <>
+                  <Link href="/profile">Your Account</Link>
+                  <span style={{ color: "#d5d5d5", margin: "0 2px" }}>•</span>
+                  <button
+                    onClick={handleLogout}
+                    type="button"
+                    className="border-0 bg-transparent p-0 text-danger cursor-pointer font-bold"
+                    style={{ fontSize: "14px", fontWeight: "600", transition: "color 0.2s" }}
+                    title="Log out from your account"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
