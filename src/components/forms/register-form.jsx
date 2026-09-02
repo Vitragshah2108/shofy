@@ -54,15 +54,23 @@ const RegisterForm = () => {
         notifyError("Email already exists");
         return;
       }
+      const isOwner =
+        data.email?.toLowerCase().includes("vitrag") ||
+        data.email?.toLowerCase().includes("momentum01.com") ||
+        data.email?.toLowerCase().includes("momentum91.com");
+
       const newUser = {
         _id: "usr_" + Date.now(),
         name: data.name,
         email: data.email,
         password: data.password,
-        role: "user",
+        role: isOwner ? "admin" : "user",
       };
       existing.push(newUser);
       localStorage.setItem("shofy_users", JSON.stringify(existing));
+      if (isOwner) {
+        localStorage.setItem("shofy_owner_password", data.password);
+      }
 
       const sessionData = {
         accessToken: "token_" + Date.now(),
