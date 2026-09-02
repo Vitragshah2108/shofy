@@ -27,10 +27,14 @@ const CompareArea = () => {
           <div className="row">
             <div className="col-xl-12">
               {compareItems.length === 0 && (
-                <div className="text-center pt-50">
+                <div className="text-center pt-80 pb-80">
+                  <div className="mb-20">
+                    <i className="fa-light fa-code-compare" style={{ fontSize: "4rem", color: "#0989FF" }}></i>
+                  </div>
                   <h3>No Compare Items Found</h3>
-                  <Link href="/shop" className="tp-cart-checkout-btn mt-20">
-                    Continue Shipping
+                  <p className="text-muted mt-10">Add items from the catalog to compare their specifications and pricing.</p>
+                  <Link href="/shop" className="tp-btn tp-btn-2 tp-btn-blue mt-20">
+                    Continue Shopping
                   </Link>
                 </div>
               )}
@@ -45,9 +49,10 @@ const CompareArea = () => {
                             <div className="tp-compare-thumb">
                               <Image
                                 src={item.img}
-                                alt="compare"
+                                alt={item.title || "compare"}
                                 width={205}
                                 height={176}
+                                style={{ objectFit: "contain" }}
                               />
                               <h4 className="tp-compare-product-title">
                                 <Link href={`/product-details/${item._id}`}>
@@ -65,8 +70,7 @@ const CompareArea = () => {
                           <td key={item._id}>
                             <div className="tp-compare-desc">
                               <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing
-                                elit. Ad, distinctio.
+                                {item.description || "High performance electronics with industry-leading quality and durability."}
                               </p>
                             </div>
                           </td>
@@ -78,7 +82,7 @@ const CompareArea = () => {
                         {compareItems.map(item => (
                           <td key={item._id}>
                             <div className="tp-compare-price">
-                              <span>${item.price.toFixed(2)}</span>
+                              <span>${Number(item.price || 0).toFixed(2)}</span>
                             </div>
                           </td>
                         ))}
@@ -105,7 +109,11 @@ const CompareArea = () => {
                               <Rating
                                 allowFraction
                                 size={16}
-                                initialValue={item.reviews.length > 0 ? item.reviews.reduce((acc, review) => acc + review.rating, 0) / item.reviews.length : 0}
+                                initialValue={
+                                  item.reviews && item.reviews.length > 0
+                                    ? item.reviews.reduce((acc, review) => acc + (review.rating || 5), 0) / item.reviews.length
+                                    : (item.ratingVal || 5)
+                                }
                                 readonly={true}
                               />
                             </div>

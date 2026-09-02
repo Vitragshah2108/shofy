@@ -16,6 +16,7 @@ const ShopPage = ({ query }) => {
   const { data: products, isError, isLoading } = useGetAllProductsQuery();
   const [priceValue, setPriceValue] = useState([0, 0]);
   const [selectValue, setSelectValue] = useState("");
+  const [currPage, setCurrPage] = useState(1);
   const remoteData = (!isError && Array.isArray(products?.data)) ? products.data : [];
   const raw_products = [
     ...products_data,
