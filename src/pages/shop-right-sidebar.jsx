@@ -17,9 +17,11 @@ const ShopRightSidebarPage = ({ query }) => {
   const { data: products, isError, isLoading } = useGetAllProductsQuery();
   const [priceValue, setPriceValue] = useState([0, 0]);
   const [selectValue, setSelectValue] = useState("");
-  const [currPage, setCurrPage] = useState(1);
-  
-  const raw_products = products?.data && products.data.length > 0 ? products.data : products_data;
+  const remoteData = (!isError && Array.isArray(products?.data)) ? products.data : [];
+  const raw_products = [
+    ...products_data,
+    ...remoteData.filter((r) => !products_data.some((p) => p._id === r._id)),
+  ];
 
   // Load the maximum price once the products have been loaded
   useEffect(() => {

@@ -76,7 +76,11 @@ export default function SearchPage({ query }) {
   if (isLoading) {
     content = <SearchPrdLoader loading={isLoading} />;
   } else {
-    const all_products = (products?.data && products.data.length > 0) ? products.data : products_data;
+    const remoteData = (!isError && Array.isArray(products?.data)) ? products.data : [];
+    const all_products = [
+      ...products_data,
+      ...remoteData.filter((r) => !products_data.some((p) => p._id === r._id)),
+    ];
     let product_items = all_products.filter((prd) => smartMatch(prd, searchText, productType));
 
     // Price low to high
