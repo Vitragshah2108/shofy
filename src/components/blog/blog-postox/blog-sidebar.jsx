@@ -39,10 +39,10 @@ const BlogSidebar = () => {
               </div>
               <div className="tp-sidebar-about-content">
                 <h3 className="tp-sidebar-about-title">
-                  <a href="#">Ravi {"O'Leigh"}</a>
+                  <a href="#">Vitrag Shah</a>
                 </h3>
-                <span className="tp-sidebar-about-designation">Photographer & Blogger</span>
-                <p>Lorem ligula eget dolor. Aenean massa. Cum sociis que penatibus magnis dis parturient</p>
+                <span className="tp-sidebar-about-designation">Founder & Tech Specialist</span>
+                <p>Curating cutting-edge smart electronics, high-fidelity audio equipment, and next-generation tech gear.</p>
                 <div className="tp-sidebar-about-signature">
                   <Image src={signature} alt="signature" />
                 </div>

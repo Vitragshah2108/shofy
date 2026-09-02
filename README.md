@@ -1,106 +1,111 @@
-# Shofy – Full Stack eCommerce Web Application
+<div align="center">
 
-Shofy is a powerful and modern full stack eCommerce web application built using Next.js, Express.js, MongoDB with Mongoose, Redux Toolkit, RTK Query, Stripe payment method, Bootstrap 5, and Sass.
+  <img src="public/assets/img/logo/logo.svg" alt="Shofy Logo" width="200" />
 
-## Features Overview
+  # Shofy – Premium Full Stack eCommerce Platform
 
-- **Next.js:** Next.js is The React Framework for Production, providing a fast and scalable foundation for your eCommerce website.
-- **Express.js:** Express.js is a minimal and flexible Node.js web application framework that offers a robust set of features for web and mobile applications.
-- **MongoDB:** MongoDB is a developer-friendly data platform that provides the services and tools necessary to build distributed applications at scale.
-- **Mongoose:** Mongoose provides a straightforward, schema-based solution to model your application data, offering built-in type casting, validation, and query building.
-- **Stripe:** Stripe offers online payment solutions, allowing you to create a secure and reliable website with e-commerce functionality.
-- **Nodemailer:** Nodemailer is a module for Node.js applications that facilitates easy email sending, keeping your users informed and engaged.
-- **Authentication:** Shofy includes features for Google login, user registration, email verification, forgot password, reset password, and profile updates.
-- **Redux Toolkit:** Manage state effortlessly with Redux Toolkit, providing a convenient and efficient way to handle state in your application.
-- **RTK Query:** RTK Query is a powerful data fetching and caching tool, ensuring efficient data retrieval for a smoother user experience.
-- **Typescript + Next.js App Directory:** Shofy leverages TypeScript in combination with Next.js, enhancing code reliability and maintainability.
-- **Form Validation:** Ensure data accuracy and consistency with form validation capabilities.
-- **Bootstrap 5 (latest Version) Framework:** Bootstrap is a popular HTML, CSS, and JS framework for responsive, mobile-first projects.
-- **Responsive Layout Design:** Shofy is fully responsive across all devices, providing a seamless experience for your customers.
-- **Touch Friendly:** The web application is designed for easy browsing on touch devices, making it accessible to a wide range of users.
+  [![Next.js](https://img.shields.io/badge/Next.js-13.3-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+  [![React](https://img.shields.io/badge/React-18.2-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
+  [![Redux Toolkit](https://img.shields.io/badge/Redux_Toolkit-1.9-purple?style=for-the-badge&logo=redux)](https://redux-toolkit.js.org/)
+  [![Bootstrap](https://img.shields.io/badge/Bootstrap-5.2-purple?style=for-the-badge&logo=bootstrap)](https://getbootstrap.com/)
+  [![Stripe](https://img.shields.io/badge/Stripe-Payments-6772e5?style=for-the-badge&logo=stripe)](https://stripe.com/)
+  [![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?style=for-the-badge&logo=vercel)](https://vercel.com/)
 
-## Full Features List
+  <p align="center">
+    A state-of-the-art eCommerce platform built with Next.js, Redux Toolkit, RTK Query, Stripe, Bootstrap 5, and Sass. Featuring rich electronics product catalogs, smart fuzzy search, dynamic multi-currency and multi-language support, real-time cart/wishlist/comparison, and seamless authentication.
+  </p>
 
-- **React JS:** Utilize the power of React.js to create dynamic and interactive user interfaces.
-- **Next.js:** The React Framework for Production, optimizing your web application's performance.
-- **Express.js:** Create a robust backend for your eCommerce website using Express.js.
-- **MongoDB:** Store and retrieve data efficiently with the flexibility and scalability of MongoDB.
-- **Mongoose:** Model your application data effortlessly with Mongoose's schema-based solution.
-- **Stripe:** Integrate secure and reliable payment solutions into your online store.
-- **Nodemailer:** Keep your users informed with easy email sending capabilities.
-- **Authentication:** Enable secure user registration, login, and profile updates, including Google login option.
-- **Redux Toolkit:** Efficiently manage state in your application with Redux Toolkit.
-- **Dynamic Routes:** Create dynamic and user-friendly URLs for enhanced navigation.
-- **Based on Bootstrap 5.x:** Utilize the latest version of Bootstrap for responsive and customizable design elements.
-- **Free Premium Quality Support:** Enjoy premium support for a smooth development experience.
-- **Logo Slider Integration:** Showcase your brand and products with a logo slider.
-- **Sticky Header:** Improve user navigation with a sticky header that remains visible as users scroll.
-- **Google Fonts:** Access a wide range of fonts from Google Fonts for creative typography.
-- **100% Responsive:** Ensure a seamless experience on all devices with a fully responsive layout.
-- **Nice and Clean Design:** Present your products with a clean and professional design.
-- **Clean and Commented Code:** Maintainable and well-organized code for easy customization.
-- **Customizable Components:** Tailor the components of each page to match your brand identity.
-- **Integrated with FontAwesome:** Utilize FontAwesome icons to enhance the visual appeal of your website.
-- **Multiple Home Pages:** Choose from a variety of home page designs to best suit your business.
-- **Inner Pages:** Access a range of inner pages for various sections of your eCommerce website.
-- **Image Background:** Customize page backgrounds with visually appealing images.
-- **Flexible and Multi-Purpose:** Shofy is versatile and can be adapted to various eCommerce niches.
-- **Valid CSS3:** Comply with modern CSS standards for a better user experience.
-- **24/7 Awesome Support:** Get continuous support for any inquiries or issues you may encounter.
-- **Detailed Documentation:** Access comprehensive documentation for easy development and setup.
+</div>
 
-## Powerful Additional Features
+---
 
-- **All E-commerce Features and Apps Included:** Shofy provides a comprehensive eCommerce solution with all the essential features and apps needed for a successful online store.
-- **Variation Swatch:** Create clean and professional product pages with variation swatches that capture your customer's attention and allow easy selection of product variations.
-- **Filter Variations, Pagination, Filters by Size & Color:** Improve user experience and boost conversion rates by reducing the time needed for customers to complete their orders through filtering options and pagination.
-- **Video Gallery:** Offer customers a detailed view of products with an engaging video gallery that showcases products from different angles or in use.
-- **Sale Countdown Timer:** Increase sales and engagement for special occasions or limited-time offers with sale countdown timers that create a sense of urgency for shoppers.
-- **Product Quick View:** Enable customers to view product details without leaving their current page, providing a convenient and efficient shopping experience.
-- **Quantity Select:** Provide users with two options for selecting product quantities: a dropdown select box or manual input for more flexibility.
-- **Google and Email Password-based Authentication:** Secure user accounts with authentication methods, including Google login and email-based password authentication.
-- **User Profile and Information Update:** Allow users to update their profile information, ensuring accurate and up-to-date data for future interactions.
-- **Powerful Payment Gateway Integration using Stripe:** Securely process payments with Stripe integration, providing a smooth and reliable shopping experience for customers.
+## 🚀 Key Highlights & Features
 
-## Installation and Usage
+### 🛍️ Smart Catalog & Electronics Storefront
+- **Visual Accuracy**: 100% matched product photography, technical specifications, and realistic market pricing across Tablets, Headphones, Smartwatches, Gaming PCs, Cameras, and Accessories.
+- **Smart Multi-Field Search Engine**: Intelligent fuzzy matching across titles, categories, subcategories, tags, brands, and descriptions with singular/plural stemming (e.g., `headphone` ↔ `headphones`, `watch` ↔ `smart watch`).
+- **Interactive Topbar Switchers**: Live Language (English, Hindi, Gujarati, Spanish, French, German) & Currency (USD $, INR ₹, EUR €, GBP £, AED د.إ, CAD $) with browser persistence.
+- **Dynamic Product Filtering**: Multi-range price sliders, brand filters, category selectors, and pagination with boundary protections.
+- **Side-by-Side Product Comparison**: Compare technical specifications, descriptions, ratings, and pricing side-by-side.
 
-To get started with Shofy, follow these steps:
+### 🔐 Authentication & User Dashboard
+- **Instant Authentication & Session Management**: Seamless sign-in with Google OAuth and email/password accounts with persistent cookies.
+- **Strict Password Validation**: Secure authentication with toast alerts for incorrect credentials and instant error handling.
+- **Dedicated User Dashboard**: Order history, delivery status tracking, profile information updates, password management, and direct logout redirection.
 
-1. Install dependencies:
+### 💳 Cart, Wishlist & Stripe Checkout
+- **Slide-out Mini Cart**: Quick quantity updates, price calculations, and item removals.
+- **Persistent Wishlist**: Save favorite items across browsing sessions.
+- **Stripe Payment Gateway**: End-to-end checkout with secure payment processing.
 
-   ```bash
-   npm install --legacy-peer-deps
-   ```
+---
 
-2. Configure environment variables in `.env`:
+## 🛠️ Technology Stack
 
-   ```env
-   NEXT_PUBLIC_API_BASE_URL=https://shofy-backend.vercel.app
-   NEXT_PUBLIC_STRIPE_KEY=pk_test_...
-   NEXT_PUBLIC_GOOGLE_CLIENT_ID=...
-   ```
+- **Frontend Core:** Next.js (Pages Router & SSR), React 18, HTML5 Semantic Layouts
+- **State Management & Data Fetching:** Redux Toolkit, RTK Query
+- **Styling & UI:** Bootstrap 5, Vanilla Sass / SCSS, Swiper.js, React-Slick, FontAwesome 6 Pro
+- **Payment Processing:** Stripe Elements & Stripe JS
+- **Authentication:** Google OAuth 2.0 (`@react-oauth/google`), JSON Web Tokens & Cookies (`js-cookie`)
+- **Forms & Validation:** React Hook Form, Yup Resolvers
+- **Notifications:** React-Toastify
 
-3. Start the development server:
+---
 
-   ```bash
-   npm run dev
-   ```
+## 📦 Getting Started Locally
 
-4. Build for production:
+### 1. Clone the repository
+```bash
+git clone https://github.com/Vitragshah2108/shofy.git
+cd shofy/shofy-electronics-ecommerce-client
+```
 
-   ```bash
-   npm run build
-   npm run start
-   ```
+### 2. Install dependencies
+```bash
+npm install --legacy-peer-deps
+```
 
-5. Access the application at `http://localhost:3000`.
+### 3. Configure environment variables
+Create a `.env` file in the root directory:
+```env
+NEXT_PUBLIC_API_BASE_URL=https://shofy-backend.vercel.app
+NEXT_PUBLIC_STRIPE_KEY=your_stripe_publishable_key
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
+```
 
-## Sources and Credits
+### 4. Run the development server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-- Next.js & React
-- Redux Toolkit & RTK Query
-- Bootstrap 5 & Sass
-- Swiper Slider & React Slick
-- Google Fonts & Font Awesome Icons
+### 5. Build for production
+```bash
+npm run build
+npm run start
+```
 
- 
+---
+
+## 🌐 Deploy to Vercel
+
+Deploy instantly using the Vercel CLI:
+
+```bash
+npx vercel --prod
+```
+
+---
+
+## 👤 Author & Maintainer
+
+- **Name:** Vitrag Shah
+- **Email:** [vitragshah2108@gmail.com](mailto:vitragshah2108@gmail.com)
+- **Instagram:** [@21_vitrag](https://www.instagram.com/21_vitrag)
+- **Phone:** +91 79909 67124
+- **Address:** 5, Shivdhara, Mahakali Mandir Road, Near Saurabh School, Kanknol Road, Himatnagar, Gujarat, India
+
+---
+
+## 📄 License
+This project is licensed under the MIT License.
