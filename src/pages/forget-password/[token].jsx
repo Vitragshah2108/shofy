@@ -72,7 +72,7 @@ const ForgotPassword = ({ params }) => {
                               id="password"
                               name="password"
                               type={showPass ? "text" : "password"}
-                              placeholder="Min. 6 character"
+                              placeholder="Enter your new password (min. 6 characters)"
                             />
                           </div>
                           <div className="tp-login-input-eye" id="password-show-toggle">
@@ -93,7 +93,7 @@ const ForgotPassword = ({ params }) => {
                             <input
                               {...register("confirmPassword")}
                               type={showConPass ? "text" : "password"}
-                              placeholder="Confirm Password"
+                              placeholder="Re-enter your new password"
                               name="confirmPassword"
                               id="confirmPassword"
                             />
