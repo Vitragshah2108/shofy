@@ -31,17 +31,23 @@ const ForgotPassword = ({ params }) => {
   });
   // onSubmit
   const onSubmit = (data) => {
-    confirmForgotPassword({
-      password: data.password,
-      token,
-    }).then((result) => {
-      if (result?.error) {
-        notifyError(result?.error?.data?.error)
-      } 
-      else {
-        notifySuccess(result?.data?.message);
-      }
-    });
+      confirmForgotPassword({
+        password: data.password,
+        token,
+      }).then((result) => {
+        if (result?.error) {
+          notifyError(result?.error?.data?.error || result?.error?.data?.message || "Password reset failed");
+        } else if (
+          result?.data?.status === false || 
+          result?.data?.status === "error" || 
+          result?.data?.error || 
+          /not found|invalid|fail|error|expired/i.test(result?.data?.message || "")
+        ) {
+          notifyError(result?.data?.message || "Invalid or expired token");
+        } else {
+          notifySuccess(result?.data?.message || "Password reset successful!");
+        }
+      });
     reset();
   };
 

@@ -23,11 +23,17 @@ const ForgotForm = () => {
       resetPassword({
         verifyEmail: data.email,
       }).then((result) => {
-        if(result?.error){
-          notifyError(result?.error?.data?.message)
-        }
-        else {
-          notifySuccess(result.data?.message);
+        if (result?.error) {
+          notifyError(result?.error?.data?.message || "Reset password request failed");
+        } else if (
+          result?.data?.status === false || 
+          result?.data?.status === "error" || 
+          result?.data?.error || 
+          /not found|invalid|fail|error/i.test(result?.data?.message || "")
+        ) {
+          notifyError(result?.data?.message || "Email not found");
+        } else {
+          notifySuccess(result.data?.message || "Password reset link sent to your email!");
         }
       });
       reset();

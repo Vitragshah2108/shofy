@@ -36,10 +36,16 @@ const RegisterForm = () => {
       password: data.password,
     }).then((result) => {
       if (result?.error) {
-        notifyError("Register Failed");
+        notifyError(result?.error?.data?.message || "Register Failed");
+      } else if (
+        result?.data?.status === false || 
+        result?.data?.status === "error" || 
+        result?.data?.error || 
+        /already exit|already exist|not found|invalid|fail|error/i.test(result?.data?.message || "")
+      ) {
+        notifyError(result?.data?.message || "Email already exists");
       } else {
-        notifySuccess(result?.data?.message);
-        // router.push(redirect || "/");
+        notifySuccess(result?.data?.message || "Registration Successful!");
       }
     });
     reset();
