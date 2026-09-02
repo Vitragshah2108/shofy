@@ -1,14 +1,22 @@
 import { getTrackBackground, Range } from "react-range";
 
-const InputRange = ({ STEP, MIN, MAX, values, handleChanges }) => {
+const InputRange = ({ STEP = 1, MIN = 0, MAX = 3000, values = [0, 3000], handleChanges }) => {
+  const safeMin = Number(MIN) || 0;
+  const rawMax = Number(MAX) || 3000;
+  const safeMax = Math.max(rawMax, (values && values[1]) ? Number(values[1]) : 3000, safeMin + 10);
+  
+  const val0 = (values && values[0] !== undefined) ? Math.max(safeMin, Math.min(Number(values[0]), safeMax)) : safeMin;
+  const val1 = (values && values[1] !== undefined) ? Math.max(val0, Math.min(Number(values[1]), safeMax)) : safeMax;
+  const safeValues = [val0, val1];
+
   return (
     <>
       <Range
-        step={STEP}
-        min={MIN}
-        max={MAX}
-        values={values}
-        onChange={(vals) => handleChanges(vals)}
+        step={STEP || 1}
+        min={safeMin}
+        max={safeMax}
+        values={safeValues}
+        onChange={(vals) => handleChanges && handleChanges(vals)}
         renderTrack={({ props, children }) => (
           <div
             {...props}
@@ -17,10 +25,10 @@ const InputRange = ({ STEP, MIN, MAX, values, handleChanges }) => {
               height: '3px',
               width: '100%',
               background: getTrackBackground({
-                values: values,
+                values: safeValues,
                 colors: ["#EDEDED", "#0989FF", "#EDEDED"],
-                min: MIN,
-                max: MAX
+                min: safeMin,
+                max: safeMax
               }),
             }}
           >
@@ -34,8 +42,7 @@ const InputRange = ({ STEP, MIN, MAX, values, handleChanges }) => {
               ...props.style,
               height: '17px',
               width: '5px',
-              backgroundColor: '#0989FF',
-              backgroundColor: isDragged ? "#0989FF" : "#0989FF"
+              backgroundColor: '#0989FF'
             }}
           />
         )}

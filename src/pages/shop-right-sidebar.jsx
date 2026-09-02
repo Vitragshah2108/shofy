@@ -11,20 +11,25 @@ import ShopRightArea from "@/components/shop/shop-right-area";
 import ShopFilterOffCanvas from "@/components/common/shop-filter-offcanvas";
 import ShopLoader from "@/components/loader/shop/shop-loader";
 
+import products_data from "@/data/products-data";
+
 const ShopRightSidebarPage = ({ query }) => {
   const { data: products, isError, isLoading } = useGetAllProductsQuery();
   const [priceValue, setPriceValue] = useState([0, 0]);
   const [selectValue, setSelectValue] = useState("");
   const [currPage, setCurrPage] = useState(1);
+  
+  const raw_products = products?.data && products.data.length > 0 ? products.data : products_data;
+
   // Load the maximum price once the products have been loaded
   useEffect(() => {
-    if (!isLoading && !isError && products?.data?.length > 0) {
-      const maxPrice = products.data.reduce((max, product) => {
+    if (raw_products && raw_products.length > 0) {
+      const maxPrice = raw_products.reduce((max, product) => {
         return product.price > max ? product.price : max;
       }, 0);
       setPriceValue([0, maxPrice]);
     }
-  }, [isLoading, isError, products]);
+  }, [raw_products]);
 
   // handleChanges
   const handleChanges = (val) => {
@@ -52,20 +57,13 @@ const ShopRightSidebarPage = ({ query }) => {
 
   if (isLoading) {
     content = <ShopLoader loading={isLoading} shopRight={true}/>;
-  }
-  if (!isLoading && isError) {
-    content = <ErrorMsg msg="There was an error" />;
-  }
-  if (!isLoading && !isError && products?.data?.length === 0) {
-    content = <ErrorMsg msg="No Products found!" />;
-  }
-  if (!isLoading && !isError && products?.data?.length > 0) {
+  } else {
     // products
-    let product_items = products.data;
+    let product_items = raw_products;
     // select short filtering 
     if (selectValue) {
       if (selectValue === 'Default Sorting') {
-        product_items = products.data
+        product_items = raw_products
       }
       else if (selectValue === 'Low to High') {
         product_items = products.data.slice().sort((a, b) => Number(a.price) - Number(b.price));
@@ -126,13 +124,13 @@ const ShopRightSidebarPage = ({ query }) => {
     content = (
       <>
         <ShopRightArea
-          all_products={products.data}
+          all_products={raw_products}
           products={product_items}
           otherProps={otherProps}
           right_side={true}
         />
         <ShopFilterOffCanvas
-          all_products={products.data}
+          all_products={raw_products}
           otherProps={otherProps}
           right_side={true}
         />
