@@ -10,23 +10,31 @@ import ProductDetailsBreadcrumb from '@/components/breadcrumb/product-details-br
 import ProductDetailsArea from '@/components/product-details/product-details-area';
 import PrdDetailsLoader from '@/components/loader/prd-details-loader';
 
+import products_data from '@/data/products-data';
+
 const ProductDetailsPage = ({ query }) => {
-  const { data: product, isLoading, isError } = useGetProductQuery(query.id);
+  const isMongoId = query?.id && /^[0-9a-fA-F]{24}$/.test(query.id);
+  const { data: product, isLoading, isError } = useGetProductQuery(query?.id, {
+    skip: !isMongoId,
+  });
+
   // decide what to render
   let content = null;
-  if (isLoading) {
+  const currentProduct = (!isError && product?.data) 
+    ? product.data 
+    : products_data.find((p) => p._id === query?.id) || products_data[0];
+
+  if (isLoading && isMongoId) {
     content = <PrdDetailsLoader loading={isLoading}/>;
-  }
-  if (!isLoading && isError) {
-    content = <ErrorMsg msg="There was an error" />;
-  }
-  if (!isLoading && !isError && product) {
+  } else if (currentProduct) {
     content = (
       <>
-        <ProductDetailsBreadcrumb category={product.category.name} title={product.title} />
-        <ProductDetailsArea productItem={product} />
+        <ProductDetailsBreadcrumb category={currentProduct.category?.name || "Electronics"} title={currentProduct.title} />
+        <ProductDetailsArea productItem={currentProduct} />
       </>
     );
+  } else {
+    content = <ErrorMsg msg="Product not found" />;
   }
   return (
     <Wrapper>

@@ -37,30 +37,32 @@ const slider_setting = {
   },
 };
 
-const RelatedProducts = ({id}) => {
-  const { data: products, isError, isLoading } = useGetRelatedProductsQuery(id);
+import products_data from "@/data/products-data";
+
+const RelatedProducts = ({ id }) => {
+  const isMongoId = id && /^[0-9a-fA-F]{24}$/.test(id);
+  const { data: products, isError, isLoading } = useGetRelatedProductsQuery(id, {
+    skip: !isMongoId,
+  });
+
   // decide what to render
   let content = null;
 
-  if (isLoading) {
+  if (isLoading && isMongoId) {
     content = <HomeNewArrivalPrdLoader loading={isLoading}/>;
-  }
-  if (!isLoading && isError) {
-    content = <ErrorMsg msg="There was an error" />;
-  }
-  if (!isLoading && !isError && products?.data?.length === 0) {
-    content = <ErrorMsg msg="No Products found!" />;
-  }
-  if (!isLoading && !isError && products?.data?.length > 0) {
-    const product_items = products.data;
+  } else {
+    const product_items = (!isError && products?.data && products.data.length > 0)
+      ? products.data
+      : products_data.filter((p) => p._id !== id).slice(0, 8);
+
     content = (
       <Swiper
         {...slider_setting}
         modules={[Autoplay, Navigation]}
         className="tp-product-related-slider-active swiper-container mb-10"
       >
-        {product_items.map((item) => (
-          <SwiperSlide key={item._id}>
+        {product_items.map((item, i) => (
+          <SwiperSlide key={item._id || i}>
             <ProductItem product={item} primary_style={true} />
           </SwiperSlide>
         ))}
