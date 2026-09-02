@@ -39,7 +39,7 @@ function Language({ active, handleActive }) {
         className="tp-header-lang-toggle cursor-pointer"
         id="tp-header-lang-toggle"
       >
-        {currentLang} <i className="fa-regular fa-angle-down"></i>
+        {currentLang}
       </span>
       <ul className={active === 'lang' ? "tp-lang-list-open" : ""}>
         {languages.map((l) => (
@@ -101,7 +101,7 @@ function Currency({ active, handleActive }) {
         className="tp-header-currency-toggle cursor-pointer"
         id="tp-header-currency-toggle"
       >
-        {currentCurrency} <i className="fa-regular fa-angle-down"></i>
+        {currentCurrency}
       </span>
       <ul className={active === 'currency' ? "tp-currency-list-open" : ""}>
         {currencies.map((c) => (
