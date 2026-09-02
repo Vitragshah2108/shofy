@@ -74,6 +74,14 @@ const LoginForm = () => {
 
   // onSubmit
   const onSubmit = (data) => {
+    // 1. Instant login check for registered & owner accounts
+    const localOk = handleLocalLogin(data);
+    if (localOk) {
+      reset();
+      return;
+    }
+
+    // 2. Otherwise query remote backend
     loginUser({
       email: data.email,
       password: data.password,
@@ -83,17 +91,11 @@ const LoginForm = () => {
           notifySuccess("Login successfully");
           router.push(redirect || "/profile");
         } else {
-          const localOk = handleLocalLogin(data);
-          if (!localOk) {
-            notifyError(res?.error?.data?.error || res?.error?.data?.message || "Invalid Email or Password!");
-          }
+          notifyError(res?.error?.data?.error || res?.error?.data?.message || "Invalid Email or Password!");
         }
       })
-      .catch(() => {
-        const localOk = handleLocalLogin(data);
-        if (!localOk) {
-          notifyError("Invalid Email or Password!");
-        }
+      .catch((err) => {
+        notifyError(err?.message || "Invalid Email or Password!");
       });
     reset();
   };
