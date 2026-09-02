@@ -47,7 +47,7 @@ const DetailsTabNav = ({ product }) => {
           <div className="nav nav-tabs justify-content-center p-relative tp-product-tab" id="navPresentationTab" role="tablist">
             <NavItem active={true} linkRef={activeRef} id="desc" title="Description" />
             <NavItem id="additional" title="Additional information" />
-            <NavItem id="review" title={`Reviews (${reviews.length})`} />
+            <NavItem id="review" title={`Reviews (${reviews?.length || 0})`} />
 
             <span ref={marker} id="productTabMarker" className="tp-product-details-tab-line"></span>
           </div>
@@ -62,7 +62,7 @@ const DetailsTabNav = ({ product }) => {
                     <div className="row align-items-center">
                       <div className="col-lg-12">
                         <div className="tp-product-details-desc-content">
-                          <p>{description}</p>
+                          <p>{description || "Experience exceptional quality, premium design, and cutting-edge engineering with top performance and long-lasting durability."}</p>
                         </div>
                       </div>
                     </div>
@@ -71,20 +71,27 @@ const DetailsTabNav = ({ product }) => {
               </div>
             </div>
           </div>
-          {/* addInfo */}
+          {/* add info */}
           <div className="tab-pane fade" id="nav-additional" role="tabpanel" aria-labelledby="nav-additional-tab" tabIndex="-1">
-
-            <div className="tp-product-details-additional-info ">
+            <div className="tp-product-details-additional-info pt-60">
               <div className="row justify-content-center">
                 <div className="col-xl-10">
                   <table>
                     <tbody>
-                      {additionalInformation?.map((item, i) => (
-                        <tr key={i}>
-                          <td>{item.key}</td>
-                          <td>{item.value}</td>
-                        </tr>
-                      ))}
+                      {additionalInformation && additionalInformation.length > 0 ? (
+                        additionalInformation.map((info, i) => (
+                          <tr key={i}>
+                            <td>{info.key}</td>
+                            <td>{info.value}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <>
+                          <tr><td>Brand</td><td>Official Manufacturer Guaranteed</td></tr>
+                          <tr><td>Connectivity</td><td>High-speed USB-C / Wireless Bluetooth</td></tr>
+                          <tr><td>Warranty</td><td>1-Year Comprehensive Warranty</td></tr>
+                        </>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -101,12 +108,13 @@ const DetailsTabNav = ({ product }) => {
                     {/* reviews */}
                     <div className="tp-product-details-review-list pr-110">
                       <h3 className="tp-product-details-review-title">Rating & Review</h3>
-                      {reviews.length === 0 && <h3 className="tp-product-details-review-title">
-                        There are no reviews yet.
-                      </h3>
-                      }
-                      {reviews.length > 0 && reviews.map(item => (
-                        <ReviewItem key={item._id} review={item} />
+                      {(!reviews || reviews.length === 0) && (
+                        <h3 className="tp-product-details-review-title">
+                          There are no reviews yet.
+                        </h3>
+                      )}
+                      {reviews && reviews.length > 0 && reviews.map((item, i) => (
+                        <ReviewItem key={item._id || item.userId || i} review={item} />
                       ))}
                     </div>
                   </div>

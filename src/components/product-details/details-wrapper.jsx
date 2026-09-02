@@ -47,14 +47,14 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
   return (
     <div className="tp-product-details-wrapper">
       <div className="tp-product-details-category">
-        <span>{category.name}</span>
+        <span>{category?.name || category || "Electronics"}</span>
       </div>
       <h3 className="tp-product-details-title">{title}</h3>
 
       {/* inventory details */}
       <div className="tp-product-details-inventory d-flex align-items-center mb-10">
         <div className="tp-product-details-stock mb-10">
-          <span>{status}</span>
+          <span>{status || "in-stock"}</span>
         </div>
         <div className="tp-product-details-rating-wrapper d-flex align-items-center mb-10">
           <div className="tp-product-details-rating">
@@ -65,21 +65,27 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
           </div>
         </div>
       </div>
-      <p>{textMore ? description : `${description.substring(0, 100)}...`}
-        <span onClick={() => setTextMore(!textMore)}>{textMore ? 'See less' : 'See more'}</span>
+      <p>
+        {(() => {
+          const descText = description || "Experience exceptional quality, premium design, and cutting-edge engineering with top performance and long-lasting durability.";
+          return textMore ? descText : `${descText.substring(0, 100)}...`;
+        })()}
+        <span onClick={() => setTextMore(!textMore)} className="cursor-pointer font-bold ml-5">
+          {textMore ? ' See less' : ' See more'}
+        </span>
       </p>
 
       {/* price */}
       <div className="tp-product-details-price-wrapper mb-20">
         {discount > 0 ? (
           <>
-            <span className="tp-product-details-price old-price">${price}</span>
+            <span className="tp-product-details-price old-price">${Number(price || 0).toFixed(2)}</span>
             <span className="tp-product-details-price new-price">
-              {" "}${(Number(price) - (Number(price) * Number(discount)) / 100).toFixed(2)}
+              {" "}${(Number(price || 0) - (Number(price || 0) * Number(discount)) / 100).toFixed(2)}
             </span>
           </>
         ) : (
-          <span className="tp-product-details-price new-price">${price.toFixed(2)}</span>
+          <span className="tp-product-details-price new-price">${Number(price || 0).toFixed(2)}</span>
         )}
       </div>
 
