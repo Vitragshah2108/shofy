@@ -12,11 +12,13 @@ import NiceSelect from "@/ui/nice-select";
 import { useState } from "react";
 // internal
 
+import products_data from "@/data/products-data";
+
 export default function SearchPage({ query }) {
   const { searchText, productType } = query;
   const { data: products, isError, isLoading } = useGetAllProductsQuery();
   const [shortValue, setShortValue] = useState("");
-  const perView = 8;
+  const perView = 12;
   const [next, setNext] = useState(perView);
 
   // selectShortHandler
@@ -24,41 +26,61 @@ export default function SearchPage({ query }) {
     setShortValue(e.value);
   };
 
-  //   handleLoadMore
+  // handleLoadMore
   const handleLoadMore = () => {
     setNext((value) => value + 4);
+  };
+
+  // Smart search helper
+  const smartMatch = (product, term, filterType) => {
+    if (!term) return true;
+    const cleanTerm = term.toLowerCase().trim();
+    // Generate singular/plural tokens
+    const tokens = cleanTerm.split(/\s+/).filter(Boolean);
+
+    // Build searchable haystack
+    const title = (product.title || "").toLowerCase();
+    const categoryName = (product.category?.name || product.parent || "").toLowerCase();
+    const subCategory = (product.children || "").toLowerCase();
+    const brand = (product.brand?.name || "").toLowerCase();
+    const tags = Array.isArray(product.tags) ? product.tags.join(" ").toLowerCase() : "";
+    const description = (product.description || "").toLowerCase();
+    const type = (product.productType || "").toLowerCase();
+
+    // Check productType filter if provided
+    if (filterType && filterType !== "Select Category" && filterType !== "all") {
+      const cleanFilter = filterType.toLowerCase();
+      const matchType = type.includes(cleanFilter) || categoryName.includes(cleanFilter) || subCategory.includes(cleanFilter);
+      if (!matchType) return false;
+    }
+
+    const fullHaystack = `${title} ${categoryName} ${subCategory} ${brand} ${tags} ${description} ${type}`;
+
+    // Test each token
+    return tokens.every((token) => {
+      // Direct substring
+      if (fullHaystack.includes(token)) return true;
+      // Singular / Plural variations (e.g. headphone <-> headphones)
+      if (token.endsWith("s") && fullHaystack.includes(token.slice(0, -1))) return true;
+      if (!token.endsWith("s") && fullHaystack.includes(`${token}s`)) return true;
+      if (token === "phone" && (fullHaystack.includes("mobile") || fullHaystack.includes("smartphones"))) return true;
+      if (token === "headphone" && (fullHaystack.includes("earphone") || fullHaystack.includes("earbuds") || fullHaystack.includes("headset") || fullHaystack.includes("audio"))) return true;
+      if (token === "tab" && fullHaystack.includes("tablet")) return true;
+      if (token === "pc" && (fullHaystack.includes("computer") || fullHaystack.includes("desktop") || fullHaystack.includes("gaming"))) return true;
+      return false;
+    });
   };
 
   // decide what to render
   let content = null;
   if (isLoading) {
     content = <SearchPrdLoader loading={isLoading} />;
-  }
+  } else {
+    const all_products = (products?.data && products.data.length > 0) ? products.data : products_data;
+    let product_items = all_products.filter((prd) => smartMatch(prd, searchText, productType));
 
-  if (!isLoading && isError) {
-    content = <ErrorMsg msg="There was an error" />;
-  }
-
-  if (!isLoading && !isError && products?.data?.length === 0) {
-    content = <ErrorMsg msg="No products found!" />;
-  }
-
-  if (!isLoading && !isError && products?.data?.length > 0) {
-    let all_products = products.data;
-    let product_items = all_products;
-
-    if (searchText && !productType) {
-      product_items = all_products.filter((prd) =>
-        prd.title?.toLowerCase().includes(searchText?.toLowerCase())
-      );
-    }
-    if (searchText && productType) {
-      product_items = all_products.filter(
-        (prd) => prd.productType?.toLowerCase() === productType?.toLowerCase()
-      ).filter(p => p?.title?.toLowerCase().includes(searchText?.toLowerCase()));
-    }
-     // Price low to high
-     if (shortValue === "Price low to high") {
+    // Price low to high
+    if (shortValue === "Price low to high") {
       product_items = product_items
         .slice()
         .sort((a, b) => Number(a.price) - Number(b.price));
@@ -69,10 +91,12 @@ export default function SearchPage({ query }) {
         .slice()
         .sort((a, b) => Number(b.price) - Number(a.price));
     }
+
     if (product_items.length === 0) {
       content = (
         <div className="text-center pt-80 pb-80">
-          <h3>Sorry, nothing matched <span style={{color:'#0989FF'}}>{searchText}</span> search terms</h3>
+          <h3>Sorry, nothing matched <span style={{ color: '#0989FF' }}>"{searchText}"</span> search terms</h3>
+          <p className="mt-10 text-muted">Try searching with broader keywords like <strong>headphone, watch, tablet, camera, charger, speaker</strong></p>
         </div>
       );
     }

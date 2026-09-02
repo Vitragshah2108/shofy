@@ -26,11 +26,12 @@ const HeaderSearchForm = () => {
         <div className="tp-header-search-category">
           <NiceSelect
             options={[
-              { value: "Select Category", text: "Select Category" },
-              { value: "electronics", text: "electronics" },
-              { value: "fashion", text: "fashion" },
-              { value: "beauty", text: "beauty" },
-              { value: "jewelry", text: "jewelry" },
+              { value: "Select Category", text: "All Categories" },
+              { value: "headphones", text: "Headphones" },
+              { value: "smart-watch", text: "Smart Watch" },
+              { value: "mobile-phones", text: "Phones & Tablets" },
+              { value: "cpu-gaming", text: "CPU & Gaming" },
+              { value: "bluetooth-speaker", text: "Bluetooth Speaker" },
             ]}
             defaultCurrent={0}
             onChange={selectCategoryHandle}
