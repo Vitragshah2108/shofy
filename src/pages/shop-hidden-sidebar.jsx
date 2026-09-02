@@ -102,7 +102,7 @@ const ShopHiddenSidebarPage = () => {
     <Wrapper>
       <SEO pageTitle="Shop" />
       <HeaderTwo style_2={true} />
-      <ShopBreadcrumb title="Shop Hidden Sidebar" subtitle="Shop Hidden Sidebar" />
+      <ShopBreadcrumb title="Full Width Collection" subtitle="All Products" />
       {content}
       <Footer primary_style={true} />
     </Wrapper>

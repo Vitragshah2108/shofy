@@ -22,26 +22,7 @@ const OfferCouponItem = ({ coupon, handleCopied, copiedCode, copied }) => {
             <span>{coupon.discountPercentage}%</span>Off
           </p>
           <div className="tp-coupon-countdown">
-            {dayjs().isAfter(dayjs(coupon.endTime)) ? (
-              <div className="tp-coupon-countdown-inner">
-                <ul>
-                  <li>
-                    <span>{0}</span> Day
-                  </li>
-                  <li>
-                    <span>{0}</span> Hrs
-                  </li>
-                  <li>
-                    <span>{0}</span> Min
-                  </li>
-                  <li>
-                    <span>{0}</span> Sec
-                  </li>
-                </ul>
-              </div>
-            ) : (
-              <OfferTimer expiryTimestamp={new Date(coupon.endTime)} />
-            )}
+            <OfferTimer expiryTimestamp={coupon.endTime && dayjs().isBefore(dayjs(coupon.endTime)) ? new Date(coupon.endTime) : new Date(Date.now() + (3 * 24 + 8) * 3600 * 1000 + 30 * 60 * 1000)} />
           </div>
         </div>
       </div>
@@ -49,13 +30,7 @@ const OfferCouponItem = ({ coupon, handleCopied, copiedCode, copied }) => {
         <div className="tp-coupon-status mb-10 d-flex align-items-center">
           <h4>
             Coupon{" "}
-            <span
-              className={
-                dayjs().isAfter(dayjs(coupon.endTime)) ? "in-active" : "active"
-              }
-            >
-              {dayjs().isAfter(dayjs(coupon.endTime)) ? "Inactive" : "Active"}
-            </span>
+            <span className="active">Active</span>
           </h4>
           <div className="tp-coupon-info-details">
             <span>

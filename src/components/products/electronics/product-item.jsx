@@ -143,24 +143,7 @@ const ProductItem = ({ product, offer_style = false }) => {
           {offer_style && (
             <div className="tp-product-countdown">
               <div className="tp-product-countdown-inner">
-                {dayjs().isAfter(offerDate?.endDate) ? (
-                  <ul>
-                    <li>
-                      <span>{0}</span> Day
-                    </li>
-                    <li>
-                      <span>{0}</span> Hrs
-                    </li>
-                    <li>
-                      <span>{0}</span> Min
-                    </li>
-                    <li>
-                      <span>{0}</span> Sec
-                    </li>
-                  </ul>
-                ) : (
-                  <Timer expiryTimestamp={new Date(offerDate?.endDate)} />
-                )}
+                <Timer expiryTimestamp={offerDate?.endDate && dayjs().isBefore(offerDate?.endDate) ? new Date(offerDate.endDate) : new Date(Date.now() + (2 * 24 + 14) * 3600 * 1000 + 45 * 60 * 1000)} />
               </div>
             </div>
           )}

@@ -143,7 +143,7 @@ const ShopRightSidebarPage = ({ query }) => {
     <Wrapper>
       <SEO pageTitle="Shop" />
       <HeaderTwo style_2={true} />
-      <ShopBreadcrumb title="Shop Right Sidebar" subtitle="Shop Right Sidebar" />
+      <ShopBreadcrumb title="Featured Catalog Grid" subtitle="Shop Electronics" />
       {content}
       <Footer primary_style={true} />
     </Wrapper>

@@ -10,12 +10,12 @@ import insta_6 from "@assets/img/instagram/3/instagram-6.jpg";
 
 // instagram data
 const instagram_data = [
-  { id: 1, link: "https://www.instagram.com/", img: insta_1 },
-  { id: 2, link: "https://www.instagram.com/", img: insta_2 },
-  { id: 3, link: "https://www.instagram.com/", img: insta_3 },
-  { id: 4, link: "https://www.instagram.com/", img: insta_4 },
-  { id: 5, link: "https://www.instagram.com/", img: insta_5 },
-  { id: 6, link: "https://www.instagram.com/", img: insta_6 },
+  { id: 1, link: "https://www.instagram.com/21_vitrag", img: insta_1 },
+  { id: 2, link: "https://www.instagram.com/21_vitrag", img: insta_2 },
+  { id: 3, link: "https://www.instagram.com/21_vitrag", img: insta_3 },
+  { id: 4, link: "https://www.instagram.com/21_vitrag", img: insta_4 },
+  { id: 5, link: "https://www.instagram.com/21_vitrag", img: insta_5 },
+  { id: 6, link: "https://www.instagram.com/21_vitrag", img: insta_6 },
 ];
 
 const InstagramAreaThree = () => {
