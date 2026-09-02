@@ -5,6 +5,8 @@ import ProductItem from "./product-item";
 import ErrorMsg from "@/components/common/error-msg";
 import HomePrdLoader from "@/components/loader/home/home-prd-loader";
 
+import products_data from "@/data/products-data";
+
 const tabs = ["new", "featured", "topSellers"];
 
 const ProductArea = () => {
@@ -27,20 +29,16 @@ const ProductArea = () => {
     content = (
       <HomePrdLoader loading={isLoading}/>
     );
-  }
-  if (!isLoading && isError) {
-    content = <ErrorMsg msg="There was an error" />;
-  }
-  if (!isLoading && !isError && products?.data?.length === 0) {
-    content = <ErrorMsg msg="No Products found!" />;
-  }
-  if (!isLoading && !isError && products?.data?.length > 0) {
-    const product_items = products.data;
-    content = product_items.map((prd,i) => (
-      <div key={i} className="col-xl-3 col-lg-3 col-sm-6">
+  } else {
+    const product_items = products?.data && products.data.length > 0 
+      ? products.data 
+      : products_data.slice(0, 8);
+
+    content = product_items.map((prd, i) => (
+      <div key={prd._id || i} className="col-xl-3 col-lg-3 col-sm-6">
         <ProductItem product={prd}/>  
-    </div>
-    ))
+      </div>
+    ));
   }
   return (
     <section className="tp-product-area pb-55">

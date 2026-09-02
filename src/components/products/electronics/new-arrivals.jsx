@@ -39,6 +39,8 @@ const slider_setting = {
 		}
 }
 
+import products_data from '@/data/products-data';
+
 const NewArrivals = () => {
   const { data: products, isError, isLoading } = useGetProductTypeQuery({type:'electronics',query:'new=true'});
   // decide what to render
@@ -48,18 +50,14 @@ const NewArrivals = () => {
     content = (
       <HomeNewArrivalPrdLoader loading={isLoading}/>
     );
-  }
-  if (!isLoading && isError) {
-    content = <ErrorMsg msg="There was an error" />;
-  }
-  if (!isLoading && !isError && products?.data?.length === 0) {
-    content = <ErrorMsg msg="No Products found!" />;
-  }
-  if (!isLoading && !isError && products?.data?.length > 0) {
-    const product_items = products.data;
+  } else {
+    const product_items = products?.data && products.data.length > 0 
+      ? products.data 
+      : products_data;
+
     content = <Swiper {...slider_setting} modules={[Navigation,Pagination]} className="tp-product-arrival-active swiper-container">
-      {product_items.map((item) => (
-        <SwiperSlide key={item._id}>
+      {product_items.map((item, i) => (
+        <SwiperSlide key={item._id || i}>
           <ProductItem product={item} />
         </SwiperSlide>
       ))}

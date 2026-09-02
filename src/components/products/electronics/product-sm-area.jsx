@@ -6,6 +6,8 @@ import ErrorMsg from '@/components/common/error-msg';
 import ProductSmItem from './product-sm-item';
 import HomeSmPrdLoader from '@/components/loader/home/home-sm-prd-loader';
 
+import products_data from '@/data/products-data';
+
 const ProductSmArea = () => {
   const { data: products, isError, isLoading, refetch } = useGetProductTypeQuery({type:'electronics'});
   // decide what to render
@@ -15,17 +17,12 @@ const ProductSmArea = () => {
     content = (
       <HomeSmPrdLoader loading={isLoading} />
     );
-  }
-  if (!isLoading && isError) {
-    content = <ErrorMsg msg="There was an error" />;
-  }
-  if (!isLoading && !isError && products?.data?.length === 0) {
-    content = <ErrorMsg msg="No Products found!" />;
-  }
-  if (!isLoading && !isError && products?.data?.length > 0) {
-    const discount_prd = products.data.filter(p => p.discount > 0).slice(0, 3);
-    const featured_prd = products.data.filter(p => p.featured).slice(0, 3);
-    const selling_prd = products.data.slice().sort((a, b) => b.sellCount - a.sellCount).slice(0, 3);
+  } else {
+    const prd_source = products?.data && products.data.length > 0 ? products.data : products_data;
+    const discount_prd = prd_source.filter(p => p.discount > 0).slice(0, 3);
+    const featured_prd = prd_source.filter(p => p.featured || p.rating >= 4.8).slice(0, 3);
+    const selling_prd = prd_source.slice(3, 6);
+    
     content = <div className="row">
       <div className="col-xl-4 col-md-6">
         <div className="tp-product-sm-list mb-50">
@@ -35,8 +32,8 @@ const ProductSmArea = () => {
             </h3>
           </div>
           <div className="tp-product-sm-wrapper mr-20">
-            {discount_prd.map(item => (
-              <ProductSmItem key={item._id} product={item} />
+            {discount_prd.map((item, i) => (
+              <ProductSmItem key={item._id || i} product={item} />
             ))}
           </div>
         </div>
@@ -50,8 +47,8 @@ const ProductSmArea = () => {
           </div>
 
           <div className="tp-product-sm-wrapper mr-20">
-            {featured_prd.map(item => (
-              <ProductSmItem key={item._id} product={item} />
+            {featured_prd.map((item, i) => (
+              <ProductSmItem key={item._id || i} product={item} />
             ))}
           </div>
         </div>
@@ -65,8 +62,8 @@ const ProductSmArea = () => {
           </div>
 
           <div className="tp-product-sm-wrapper mr-20">
-            {selling_prd.map(item => (
-              <ProductSmItem key={item._id} product={item} />
+            {selling_prd.map((item, i) => (
+              <ProductSmItem key={item._id || i} product={item} />
             ))}
           </div>
         </div>

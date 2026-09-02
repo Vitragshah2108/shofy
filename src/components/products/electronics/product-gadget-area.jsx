@@ -14,6 +14,8 @@ import { useGetProductTypeQuery } from '@/redux/features/productApi';
 import gadget_girl from '@assets/img/product/gadget/gadget-girl.png';
 import HomeGadgetPrdLoader from '@/components/loader/home/home-gadget-prd-loader';
 
+import products_data from '@/data/products-data';
+
 const ProductGadgetArea = () => {
   const { data: products, isError, isLoading } = useGetProductTypeQuery({type:'electronics'});
 
@@ -24,20 +26,16 @@ const ProductGadgetArea = () => {
     content = (
       <HomeGadgetPrdLoader loading={isLoading} />
     );
-  }
-  if (!isLoading && isError) {
-    content = <ErrorMsg msg="There was an error" />;
-  }
-  if (!isLoading && !isError && products?.data?.length === 0) {
-    content = <ErrorMsg msg="No Products found!" />;
-  }
-  if (!isLoading && !isError && products?.data?.length > 0) {
-    const product_items = products.data.slice(0, 6);
+  } else {
+    const product_items = products?.data && products.data.length > 0 
+      ? products.data.slice(0, 6) 
+      : products_data.slice(3, 9);
+      
     content = product_items.map((prd, i) => (
-      <div key={i} className="col-xl-4 col-sm-6">
+      <div key={prd._id || i} className="col-xl-4 col-sm-6">
         <ProductItem product={prd} />
       </div>
-    ))
+    ));
   }
 
   // gadget banner 

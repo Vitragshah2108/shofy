@@ -5,6 +5,8 @@ import ErrorMsg from "@/components/common/error-msg";
 import { useGetProductTypeCategoryQuery } from "@/redux/features/categoryApi";
 import CategoryListLoader from "@/components/loader/home/category-list-loader";
 
+import category_data from "@/data/category-data";
+
 const PrdCategoryList = () => {
   const {
     data: categories,
@@ -28,15 +30,11 @@ const PrdCategoryList = () => {
 
   if (isLoading) {
     content = <CategoryListLoader loading={isLoading}/>;
-  }
-  if (!isLoading && isError) {
-    content = <ErrorMsg msg="There was an error" />;
-  }
-  if (!isLoading && !isError && categories?.result?.length === 0) {
-    content = <ErrorMsg msg="No Category found!" />;
-  }
-  if (!isLoading && !isError && categories?.result?.length > 0) {
-    const category_items = categories.result;
+  } else {
+    const category_items = categories?.result && categories.result.length > 0 
+      ? categories.result 
+      : category_data;
+
     content = category_items.map((item) => (
       <li key={item._id}>
         <a onClick={()=>handleCategoryRoute(item.parent)} className="cursor-pointer">{item.parent}</a>

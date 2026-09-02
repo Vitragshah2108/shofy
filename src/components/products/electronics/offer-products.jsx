@@ -36,22 +36,20 @@ const sliderSetting = {
   },
 };
 
+import products_data from "@/data/products-data";
+
 const OfferProducts = () => {
-  const {data: products,isError,isLoading} = useGetOfferProductsQuery("electronics");
-  // decide what to render
-  console.log(products)
+  const { data: products, isError, isLoading } = useGetOfferProductsQuery("electronics");
+  
   let content = null;
   if (isLoading) {
     content = <HomeOfferPrdLoader loading={isLoading} />;
-  }
-  if (!isLoading && isError) {
-    content = <ErrorMsg msg="There was an error" />;
-  }
-  if (!isLoading && !isError && products?.data?.length === 0) {
-    content = <ErrorMsg msg="No Products found!" />;
-  }
-  if (!isLoading && !isError && products?.data?.length > 0) {
-    const product_items = products.data;
+  } else {
+    // If backend has offer products use them, otherwise use rich electronics deals
+    const product_items = products?.data && products.data.length > 0 
+      ? products.data 
+      : products_data.filter(p => p.discount > 0 || p.offerDate);
+
     content = (
       <Swiper
         {...sliderSetting}
@@ -59,7 +57,7 @@ const OfferProducts = () => {
         className="tp-product-offer-slider-active swiper-container"
       >
         {product_items.map((item, i) => (
-          <SwiperSlide key={i}>
+          <SwiperSlide key={item._id || i}>
             <ProductItem product={item} offer_style={true} />
           </SwiperSlide>
         ))}

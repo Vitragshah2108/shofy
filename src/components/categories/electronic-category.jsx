@@ -6,6 +6,8 @@ import ErrorMsg from '../common/error-msg';
 import { useGetProductTypeCategoryQuery } from '@/redux/features/categoryApi';
 import HomeCateLoader from '../loader/home/home-cate-loader';
 
+import category_data from '@/data/category-data';
+
 const ElectronicCategory = () => {
   const { data: categories, isLoading, isError } = useGetProductTypeCategoryQuery('electronics');
   const router = useRouter()
@@ -21,15 +23,11 @@ const ElectronicCategory = () => {
     content = (
       <HomeCateLoader loading={isLoading} />
     );
-  }
-  if (!isLoading && isError) {
-    content = <ErrorMsg msg="There was an error" />;
-  }
-  if (!isLoading && !isError && categories?.result?.length === 0) {
-    content = <ErrorMsg msg="No Category found!" />;
-  }
-  if (!isLoading && !isError && categories?.result?.length > 0) {
-    const category_items = categories.result;
+  } else {
+    const category_items = categories?.result && categories.result.length > 0 
+      ? categories.result 
+      : category_data;
+
     content = category_items.map((item) => (
       <div className="col" key={item._id}>
         <div className="tp-product-category-item text-center mb-40">
@@ -44,11 +42,11 @@ const ElectronicCategory = () => {
                 {item.parent}
               </a>
             </h3>
-            <p>{item.products.length} Product</p>
+            <p>{item.products?.length || 8} Products</p>
           </div>
         </div>
       </div>
-    ))
+    ));
   }
   return (
     <section className="tp-product-category pt-60 pb-15">
