@@ -126,30 +126,78 @@ function Currency({ active, handleActive }) {
 // setting
 function ProfileSetting({ active, handleActive }) {
   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    dispatch(userLoggedOut());
+    handleActive("");
+    router.push("/login");
+  };
 
   return (
     <div className="tp-header-top-menu-item tp-header-setting">
       <span
         onClick={() => handleActive('setting')}
-        className="tp-header-setting-toggle"
+        className="tp-header-setting-toggle cursor-pointer"
         id="tp-header-setting-toggle"
       >
-        Setting
+        {user?.name ? user.name.split(' ')[0] : 'Setting'}
       </span>
       <ul className={active === 'setting' ? "tp-setting-list-open" : ""}>
-        <li>
-          <Link href="/profile">My Dashboard</Link>
-        </li>
-        <li>
-          <Link href="/wishlist">Wishlist</Link>
-        </li>
-        <li>
-          <Link href="/cart">Cart</Link>
-        </li>
-        {!user?.name && (
-          <li>
-            <Link href="/login" className="cursor-pointer">Login / Register</Link>
-          </li>
+        {user?.name ? (
+          <>
+            <li>
+              <Link href="/profile" onClick={() => handleActive("")}>
+                My Profile
+              </Link>
+            </li>
+            <li>
+              <Link href="/wishlist" onClick={() => handleActive("")}>
+                Wishlist
+              </Link>
+            </li>
+            <li>
+              <Link href="/cart" onClick={() => handleActive("")}>
+                Cart
+              </Link>
+            </li>
+            <li>
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLogout();
+                }}
+                className="cursor-pointer text-danger fw-bold"
+                href="#"
+              >
+                Logout
+              </a>
+            </li>
+          </>
+        ) : (
+          <>
+            <li>
+              <Link href="/login" onClick={() => handleActive("")} className="cursor-pointer">
+                Sign In
+              </Link>
+            </li>
+            <li>
+              <Link href="/register" onClick={() => handleActive("")} className="cursor-pointer">
+                Register
+              </Link>
+            </li>
+            <li>
+              <Link href="/wishlist" onClick={() => handleActive("")}>
+                Wishlist
+              </Link>
+            </li>
+            <li>
+              <Link href="/cart" onClick={() => handleActive("")}>
+                Cart
+              </Link>
+            </li>
+          </>
         )}
       </ul>
     </div>

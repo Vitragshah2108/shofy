@@ -84,7 +84,7 @@ const HeaderThree = () => {
       {/* cart mini sidebar end */}
 
       {/* off canvas start */}
-      <OffCanvas isOffCanvasOpen={isOffCanvasOpen} setIsCanvasOpen={setIsCanvasOpen} categoryType="beauty" />
+      <OffCanvas isOffCanvasOpen={isOffCanvasOpen} setIsCanvasOpen={setIsCanvasOpen} categoryType="electronics" />
       {/* off canvas end */}
     </>
   );

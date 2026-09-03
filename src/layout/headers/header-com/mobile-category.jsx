@@ -39,7 +39,7 @@ const defaultElectronicsCategories = [
   },
 ];
 
-const MobileCategory = ({ isCategoryActive, categoryType = "electronics" }) => {
+const MobileCategory = ({ isCategoryActive, categoryType = "electronics", setIsCanvasOpen }) => {
   const { data: categories, isError, isLoading } = useGetProductTypeCategoryQuery(categoryType);
   const [isActiveSubMenu, setIsActiveSubMenu] = useState("");
   const router = useRouter();
@@ -55,6 +55,7 @@ const MobileCategory = ({ isCategoryActive, categoryType = "electronics" }) => {
 
   // handle category route
   const handleCategoryRoute = (title, route) => {
+    if (setIsCanvasOpen) setIsCanvasOpen(false);
     if (route === "parent") {
       router.push(
         `/shop?category=${encodeURIComponent(title.toLowerCase())}`
