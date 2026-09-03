@@ -48,12 +48,13 @@ const ProductItem = ({ product, style_2 = false }) => {
   return (
     <div className={`tp-product-item-2 ${style_2 ? "" : "mb-40"}`}>
       <div className="tp-product-thumb-2 p-relative z-index-1 fix">
-        <Link href={`/product-details/${_id}`}>
+        <Link href={`/product-details/${_id}`} className="d-block cursor-pointer">
           <Image
             src={img}
             alt="product img"
             width={284}
             height={302}
+            style={{ width: "100%", height: "auto", cursor: "pointer" }}
           />
         </Link>
         <div className="tp-product-badge">
@@ -111,11 +112,11 @@ const ProductItem = ({ product, style_2 = false }) => {
       </div>
       <div className="tp-product-content-2 pt-15">
         <div className="tp-product-tag-2">
-          {tags.map((t, i) => (
-            <a key={i} href="#">
+          {tags && tags.map((t, i) => (
+            <Link key={i} href={`/product-details/${_id}`} className="cursor-pointer">
               {t}
-              {i < tags.length - 1 && ","}
-            </a>
+              {i < tags.length - 1 && ", "}
+            </Link>
           ))}
         </div>
         <h3 className="tp-product-title-2">

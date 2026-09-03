@@ -85,7 +85,12 @@ const ShopListItem = ({ product }) => {
       <div className="tp-product-list-content">
         <div className="tp-product-content-2 pt-15">
           <div className="tp-product-tag-2">
-            {tags?.map((t, i) => <a key={i} href="#">{t}</a>)}
+            {tags?.map((t, i) => (
+              <Link key={i} href={`/product-details/${_id}`} className="cursor-pointer">
+                {t}
+                {i < tags.length - 1 && ", "}
+              </Link>
+            ))}
           </div>
           <h3 className="tp-product-title-2">
             <Link href={`/product-details/${_id}`}>{title}</Link>
@@ -106,7 +111,9 @@ const ShopListItem = ({ product }) => {
             )}
           </div>
           <p>
-            {description.substring(0, 100)}
+            <Link href={`/product-details/${_id}`} className="cursor-pointer">
+              {description ? description.substring(0, 100) + "..." : ""}
+            </Link>
           </p>
           <div className="tp-product-list-add-to-cart">
             <button onClick={() => handleAddProduct(product)} className="tp-product-list-add-to-cart-btn">

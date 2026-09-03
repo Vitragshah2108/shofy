@@ -108,7 +108,7 @@ const ProductItem = ({ product, offer_style = false }) => {
         {/*  product content */}
         <div className="tp-product-content">
           <div className="tp-product-category">
-            <a href="#">{category?.name}</a>
+            <Link href={`/product-details/${_id}`} className="cursor-pointer">{category?.name}</Link>
           </div>
           <h3 className="tp-product-title">
             <Link href={`/product-details/${_id}`}>{title}</Link>
