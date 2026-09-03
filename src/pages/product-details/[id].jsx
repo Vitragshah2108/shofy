@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 // internal
 import SEO from '@/components/seo';
 import HeaderTwo from '@/layout/headers/header-2';
@@ -13,23 +14,32 @@ import PrdDetailsLoader from '@/components/loader/prd-details-loader';
 import products_data from '@/data/products-data';
 
 const ProductDetailsPage = ({ query }) => {
-  const isMongoId = query?.id && /^[0-9a-fA-F]{24}$/.test(query.id);
-  const { data: product, isLoading, isError } = useGetProductQuery(query?.id, {
+  const router = useRouter();
+  const productId = query?.id || router.query?.id;
+  const isMongoId = productId && /^[0-9a-fA-F]{24}$/.test(productId);
+  const { data: product, isLoading, isError } = useGetProductQuery(productId, {
     skip: !isMongoId,
   });
 
   // decide what to render
   let content = null;
-  const currentProduct = (!isError && product?.data) 
-    ? product.data 
-    : products_data.find((p) => p._id === query?.id) || products_data[0];
+  let currentProduct = (!isError && product?.data) ? product.data : null;
+  if (!currentProduct && productId) {
+    currentProduct = products_data.find((p) => String(p._id) === String(productId));
+  }
+  if (!currentProduct) {
+    currentProduct = products_data[0];
+  }
 
   if (isLoading && isMongoId) {
     content = <PrdDetailsLoader loading={isLoading}/>;
   } else if (currentProduct) {
     content = (
       <>
-        <ProductDetailsBreadcrumb category={currentProduct.category?.name || "Electronics"} title={currentProduct.title} />
+        <ProductDetailsBreadcrumb 
+          category={currentProduct.category?.name || currentProduct.parent || "Electronics"} 
+          title={currentProduct.title} 
+        />
         <ProductDetailsArea productItem={currentProduct} />
       </>
     );
@@ -38,7 +48,7 @@ const ProductDetailsPage = ({ query }) => {
   }
   return (
     <Wrapper>
-      <SEO pageTitle="Product Details" />
+      <SEO pageTitle={currentProduct?.title || "Product Details"} />
       <HeaderTwo style_2={true} />
       {content}
       <Footer primary_style={true} />
@@ -53,7 +63,7 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
-      query,
+      query: query || {},
     },
   };
 };

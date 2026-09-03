@@ -90,7 +90,7 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
       </div>
 
       {/* variations */}
-      {imageURLs.some(item => item?.color && item?.color?.name) && <div className="tp-product-details-variation">
+      {Array.isArray(imageURLs) && imageURLs.some(item => item?.color && item?.color?.name) && <div className="tp-product-details-variation">
         <div className="tp-product-details-variation-item">
           <h4 className="tp-product-details-variation-title">Color :</h4>
           <div className="tp-product-details-variation-list">
@@ -98,10 +98,10 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
               <button onClick={() => handleImageActive(item)} key={i} type="button"
                 className={`color tp-color-variation-btn ${item.img === activeImg ? "active" : ""}`} >
                 <span
-                  data-bg-color={`${item.color.clrCode}`}
-                  style={{ backgroundColor: `${item.color.clrCode}` }}
+                  data-bg-color={`${item?.color?.clrCode || '#000'}`}
+                  style={{ backgroundColor: `${item?.color?.clrCode || '#000'}` }}
                 ></span>
-                {item.color && item.color.name && (
+                {item?.color && item.color.name && (
                   <span className="tp-color-variation-tootltip">
                     {item.color.name}
                   </span>
@@ -148,7 +148,7 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
       </div>
       {/* product-details-action-sm end */}
 
-      {detailsBottom && <DetailsBottomInfo category={category?.name} sku={sku} tag={tags[0]} />}
+      {detailsBottom && <DetailsBottomInfo category={category?.name || (typeof category === 'string' ? category : 'Electronics')} sku={sku || 'SHOFY-EL-01'} tag={Array.isArray(tags) && tags.length > 0 ? tags[0] : 'Electronics'} />}
     </div>
   );
 };
