@@ -5,11 +5,11 @@ export const reviewApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     addReview: builder.mutation({
       query: (data) => ({
-        url: "https://shofy-backend.vercel.app/api/review/add",
+        url: `/review/add`,
         method: "POST",
         body: data,
       }),
-      invalidatesTags: (result, error, arg) => ["Products",{ type: "Product", id: arg.productId }],
+      invalidatesTags: (result, error, arg) => ["Products", { type: "Product", id: arg.productId }],
     }),
   }),
 });
