@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { useRouter } from "next/router";
+// internal
 import CommonBreadcrumb from "@/components/breadcrumb/common-breadcrumb";
 import ErrorMsg from "@/components/common/error-msg";
 import SearchPrdLoader from "@/components/loader/search-prd-loader";
@@ -9,12 +12,12 @@ import HeaderTwo from "@/layout/headers/header-2";
 import Wrapper from "@/layout/wrapper";
 import { useGetAllProductsQuery } from "@/redux/features/productApi";
 import NiceSelect from "@/ui/nice-select";
-import { useState } from "react";
-// internal
 
 import products_data from "@/data/products-data";
 
-export default function SearchPage({ query }) {
+export default function SearchPage() {
+  const router = useRouter();
+  const query = router.query || {};
   const { searchText, productType } = query;
   const { data: products, isError, isLoading } = useGetAllProductsQuery();
   const [shortValue, setShortValue] = useState("");
@@ -189,12 +192,3 @@ export default function SearchPage({ query }) {
   );
 }
 
-export const getServerSideProps = async (context) => {
-  const { query } = context;
-
-  return {
-    props: {
-      query,
-    },
-  };
-};

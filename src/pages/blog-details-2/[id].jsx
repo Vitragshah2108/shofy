@@ -3,11 +3,11 @@ import SEO from "@/components/seo";
 import HeaderTwo from "@/layout/headers/header-2";
 import Wrapper from "@/layout/wrapper";
 import Footer from "@/layout/footers/footer";
-import blogData from "@/data/blog-data";
 import BlogDetailsAreaTwo from "@/components/blog-details/blog-details-area-2";
+import blogData from "@/data/blog-data";
 
-const BlogDetailsPageTwo = ({query}) => {
-  const blogItem = blogData.find(b => Number(b.id) === Number(query.id))
+const BlogDetailsPage = ({ id }) => {
+  const blogItem = blogData.find(b => Number(b.id) === Number(id)) || blogData[0];
   return (
     <Wrapper>
       <SEO pageTitle="Blog Details" />
@@ -18,15 +18,15 @@ const BlogDetailsPageTwo = ({query}) => {
   );
 };
 
-export default BlogDetailsPageTwo;
+export default BlogDetailsPage;
 
 export const getServerSideProps = async (context) => {
-  const { query } = context;
+  const { params, query } = context;
+  const id = params?.id || query?.id || null;
 
   return {
     props: {
-      query,
+      id,
     },
   };
 };
-

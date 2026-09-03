@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 // internal
 import SEO from '@/components/seo';
 import HeaderTwo from '@/layout/headers/header-2';
@@ -13,26 +12,18 @@ import PrdDetailsLoader from '@/components/loader/prd-details-loader';
 
 import products_data from '@/data/products-data';
 
-const ProductDetailsPage = ({ query }) => {
-  const router = useRouter();
-  const productId = query?.id || router.query?.id;
-  const isMongoId = productId && /^[0-9a-fA-F]{24}$/.test(productId);
-  const { data: product, isLoading, isError } = useGetProductQuery(productId, {
+const ProductDetailsPage = ({ id }) => {
+  const isMongoId = id && /^[0-9a-fA-F]{24}$/.test(id);
+  const { data: product, isLoading, isError } = useGetProductQuery(id, {
     skip: !isMongoId,
   });
 
-  // decide what to render
-  let content = null;
-  let currentProduct = (!isError && product?.data) ? product.data : null;
-  if (!currentProduct && productId) {
-    currentProduct = products_data.find((p) => String(p._id) === String(productId));
-  }
-  if (!currentProduct) {
-    currentProduct = products_data[0];
-  }
+  const staticPrd = products_data.find((p) => String(p._id) === String(id));
+  const currentProduct = (!isError && product?.data) ? product.data : (staticPrd || products_data[0]);
 
+  let content = null;
   if (isLoading && isMongoId) {
-    content = <PrdDetailsLoader loading={isLoading}/>;
+    content = <PrdDetailsLoader loading={isLoading} />;
   } else if (currentProduct) {
     content = (
       <>
@@ -46,6 +37,7 @@ const ProductDetailsPage = ({ query }) => {
   } else {
     content = <ErrorMsg msg="Product not found" />;
   }
+
   return (
     <Wrapper>
       <SEO pageTitle={currentProduct?.title || "Product Details"} />
@@ -59,11 +51,12 @@ const ProductDetailsPage = ({ query }) => {
 export default ProductDetailsPage;
 
 export const getServerSideProps = async (context) => {
-  const { query } = context;
+  const { params, query } = context;
+  const id = params?.id || query?.id || null;
 
   return {
     props: {
-      query: query || {},
+      id,
     },
   };
 };

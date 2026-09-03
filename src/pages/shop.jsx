@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import SEO from "@/components/seo";
 import Wrapper from "@/layout/wrapper";
 import HeaderTwo from "@/layout/headers/header-2";
@@ -12,7 +13,9 @@ import ShopLoader from "@/components/loader/shop/shop-loader";
 
 import products_data from "@/data/products-data";
 
-const ShopPage = ({ query }) => {
+const ShopPage = () => {
+  const router = useRouter();
+  const query = router.query || {};
   const { data: products, isError, isLoading } = useGetAllProductsQuery();
   const [priceValue, setPriceValue] = useState([0, 0]);
   const [selectValue, setSelectValue] = useState("");
@@ -168,13 +171,3 @@ const ShopPage = ({ query }) => {
 };
 
 export default ShopPage;
-
-export const getServerSideProps = async (context) => {
-  const { query } = context;
-
-  return {
-    props: {
-      query,
-    },
-  };
-};

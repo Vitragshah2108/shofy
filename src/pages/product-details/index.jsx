@@ -12,7 +12,7 @@ import PrdDetailsLoader from '@/components/loader/prd-details-loader';
 
 import products_data from '@/data/products-data';
 
-const ProductDetailsPage = ({ query }) => {
+const ProductDetailsPage = () => {
   const { data: product, isLoading, isError } = useGetProductQuery("6431364df5a812bd37e765ac");
   
   const currentProduct = (!isError && product?.data) ? product.data : products_data[0];
@@ -41,13 +41,3 @@ const ProductDetailsPage = ({ query }) => {
 };
 
 export default ProductDetailsPage;
-
-export const getServerSideProps = async (context) => {
-  const { query } = context;
-
-  return {
-    props: {
-      query,
-    },
-  };
-};

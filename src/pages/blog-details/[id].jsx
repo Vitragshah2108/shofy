@@ -6,8 +6,8 @@ import Footer from "@/layout/footers/footer";
 import BlogDetailsArea from "@/components/blog-details/blog-details-area";
 import blogData from "@/data/blog-data";
 
-const BlogDetailsPage = ({query}) => {
-  const blogItem = blogData.find(b => Number(b.id) === Number(query.id))
+const BlogDetailsPage = ({ id }) => {
+  const blogItem = blogData.find(b => Number(b.id) === Number(id)) || blogData[0];
   return (
     <Wrapper>
       <SEO pageTitle="Blog Details" />
@@ -21,12 +21,12 @@ const BlogDetailsPage = ({query}) => {
 export default BlogDetailsPage;
 
 export const getServerSideProps = async (context) => {
-  const { query } = context;
+  const { params, query } = context;
+  const id = params?.id || query?.id || null;
 
   return {
     props: {
-      query,
+      id,
     },
   };
 };
-

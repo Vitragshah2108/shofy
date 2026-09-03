@@ -14,6 +14,7 @@ import products_data from "@/data/products-data";
 
 const ShopHiddenSidebarPage = () => {
   const { data: products, isError, isLoading } = useGetAllProductsQuery();
+  const [priceValue, setPriceValue] = useState([0, 0]);
   const [selectValue, setSelectValue] = useState("");
   const [currPage, setCurrPage] = useState(1);
   const remoteData = (!isError && Array.isArray(products?.data)) ? products.data : [];
@@ -109,13 +110,3 @@ const ShopHiddenSidebarPage = () => {
 };
 
 export default ShopHiddenSidebarPage;
-
-export const getServerSideProps = async (context) => {
-  const { query } = context;
-
-  return {
-    props: {
-      query,
-    },
-  };
-};
