@@ -16,58 +16,71 @@ const MobileMenus = ({ setIsCanvasOpen }) => {
     }
   };
 
-  const handleLinkClick = (href) => {
+  const navigateTo = (e, href) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (setIsCanvasOpen) setIsCanvasOpen(false);
-    if (href) router.push(href);
+    if (href) {
+      router.push(href);
+    }
   };
 
   return (
     <nav className="tp-main-menu-content">
-      {mobile_menu.map((menu, i) => (
-        <ul key={i}>
-          {menu.sub_menu ? (
-            <li className={`has-dropdown ${isActiveMenu === menu.title ? 'dropdown-opened' : ''}`}>
-              <a
-                className={`cursor-pointer ${isActiveMenu === menu.title ? 'expanded' : ''}`}
-                onClick={() => handleOpenSubMenu(menu.title)}
-              >
-                {menu.title}
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleOpenSubMenu(menu.title);
-                  }}
-                  className={`dropdown-toggle-btn ${isActiveMenu === menu.title ? 'dropdown-opened' : ''}`}
+      <ul>
+        {mobile_menu.map((menu, i) => {
+          if (menu.sub_menu) {
+            const isOpen = isActiveMenu === menu.title;
+            return (
+              <li key={menu.id || i} className={`has-dropdown ${isOpen ? 'dropdown-opened' : ''}`}>
+                <a
+                  className={`cursor-pointer ${isOpen ? 'expanded' : ''}`}
+                  onClick={() => handleOpenSubMenu(menu.title)}
                 >
-                  <i className="fa-regular fa-angle-right"></i>
-                </button>
-              </a>
-              <ul className={`tp-submenu ${isActiveMenu === menu.title ? 'active' : ''}`}>
-                {menu.sub_menus.map((b, idx) => (
-                  <li key={idx}>
-                    <a
-                      className="cursor-pointer"
-                      onClick={() => handleLinkClick(b.link)}
-                    >
-                      {b.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ) : (
-            <li>
-              <a
+                  {menu.title}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleOpenSubMenu(menu.title);
+                    }}
+                    className={`dropdown-toggle-btn ${isOpen ? 'dropdown-opened' : ''}`}
+                  >
+                    <i className="fa-regular fa-angle-right"></i>
+                  </button>
+                </a>
+                <ul className={`tp-submenu ${isOpen ? 'active' : ''}`} style={{ display: isOpen ? 'block' : 'none' }}>
+                  {menu.sub_menus.map((b, idx) => (
+                    <li key={idx}>
+                      <Link
+                        href={b.link}
+                        onClick={(e) => navigateTo(e, b.link)}
+                        className="cursor-pointer"
+                      >
+                        {b.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            );
+          }
+
+          return (
+            <li key={menu.id || i}>
+              <Link
+                href={menu.link}
+                onClick={(e) => navigateTo(e, menu.link)}
                 className="cursor-pointer"
-                onClick={() => handleLinkClick(menu.link)}
               >
                 {menu.title}
-              </a>
+              </Link>
             </li>
-          )}
-        </ul>
-      ))}
+          );
+        })}
+      </ul>
     </nav>
   );
 };
