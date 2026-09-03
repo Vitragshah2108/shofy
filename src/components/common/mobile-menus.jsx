@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { mobile_menu } from "@/data/menu-data";
 
@@ -7,22 +6,14 @@ const MobileMenus = ({ setIsCanvasOpen }) => {
   const [isActiveMenu, setIsActiveMenu] = useState("");
   const router = useRouter();
 
-  // handleOpenSubMenu
   const handleOpenSubMenu = (title) => {
-    if (title === isActiveMenu) {
-      setIsActiveMenu("");
-    } else {
-      setIsActiveMenu(title);
-    }
+    setIsActiveMenu((prev) => (prev === title ? "" : title));
   };
 
-  const navigateTo = (e, href) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+  const handleNav = (href) => {
     if (setIsCanvasOpen) setIsCanvasOpen(false);
     if (href) {
+      if (router.asPath === href) return;
       router.push(href);
     }
   };
@@ -54,13 +45,12 @@ const MobileMenus = ({ setIsCanvasOpen }) => {
                 <ul className={`tp-submenu ${isOpen ? 'active' : ''}`} style={{ display: isOpen ? 'block' : 'none' }}>
                   {menu.sub_menus.map((b, idx) => (
                     <li key={idx}>
-                      <Link
-                        href={b.link}
-                        onClick={(e) => navigateTo(e, b.link)}
+                      <a
                         className="cursor-pointer"
+                        onClick={() => handleNav(b.link)}
                       >
                         {b.title}
-                      </Link>
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -70,13 +60,12 @@ const MobileMenus = ({ setIsCanvasOpen }) => {
 
           return (
             <li key={menu.id || i}>
-              <Link
-                href={menu.link}
-                onClick={(e) => navigateTo(e, menu.link)}
+              <a
                 className="cursor-pointer"
+                onClick={() => handleNav(menu.link)}
               >
                 {menu.title}
-              </Link>
+              </a>
             </li>
           );
         })}

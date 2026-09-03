@@ -62,9 +62,9 @@ const HeaderTwo = ({ style_2 = false }) => {
               <div className="tp-mega-menu-wrapper p-relative">
                 <div className="row align-items-center">
                   <div className="col-xl-2 col-lg-5 col-md-5 col-sm-4 col-6">
-                    <div className="logo">
-                      <Link href="/" onClick={() => router.push('/')} className="cursor-pointer d-inline-block">
-                        <Image src={logo} alt="logo" priority />
+                    <div className="logo" onClick={() => router.push('/')} style={{ cursor: "pointer", display: "inline-block" }}>
+                      <Link href="/" onClick={(e) => { e.preventDefault(); router.push('/'); }}>
+                        <Image src={logo} alt="logo" priority style={{ cursor: "pointer" }} />
                       </Link>
                     </div>
                   </div>

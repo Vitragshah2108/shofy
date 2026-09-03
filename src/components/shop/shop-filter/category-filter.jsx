@@ -2,70 +2,73 @@ import React from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 // internal
-import ErrorMsg from "@/components/common/error-msg";
-import { useGetShowCategoryQuery } from "@/redux/features/categoryApi";
 import { handleFilterSidebarClose } from "@/redux/features/shop-filter-slice";
-import ShopCategoryLoader from "@/components/loader/shop/shop-category-loader";
 
-const CategoryFilter = ({setCurrPage,shop_right=false}) => {
-  const { data: categories, isLoading, isError } = useGetShowCategoryQuery();
+const defaultCategories = [
+  "Smart Tablets",
+  "Headphones & Audio",
+  "Smart Watches",
+  "Computers & Laptops",
+  "Cameras & Photo",
+  "Mobile Accessories",
+];
+
+const CategoryFilter = ({ setCurrPage, shop_right = false, all_products = [] }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
   // handle category route
   const handleCategoryRoute = (title) => {
     setCurrPage(1);
-    router.push(
-      `/${shop_right?'shop-right-sidebar':'shop'}?category=${title
-        .toLowerCase()
-        .replace("&", "")
-        .split(" ")
-        .join("-")}`
-        )
+    const categoryParam = title.toLowerCase().replace("&", "").split(" ").join("-");
+    router.push(`/${shop_right ? 'shop-right-sidebar' : 'shop'}?category=${encodeURIComponent(categoryParam)}`);
     dispatch(handleFilterSidebarClose());
-  }
-  // decide what to render
-  let content = null;
+  };
 
-  if (isLoading) {
-    content = <ShopCategoryLoader loading={isLoading}/>;
+  // calculate categories from products if available
+  const categoriesMap = {};
+  if (all_products && all_products.length > 0) {
+    all_products.forEach((p) => {
+      if (p.parent) {
+        categoriesMap[p.parent] = (categoriesMap[p.parent] || 0) + 1;
+      }
+    });
   }
-  if (!isLoading && isError) {
-    content = <ErrorMsg msg="There was an error" />;
+
+  // fallback categories if none in current items
+  if (Object.keys(categoriesMap).length === 0) {
+    defaultCategories.forEach((cat) => {
+      categoriesMap[cat] = 0;
+    });
   }
-  if (!isLoading && !isError && categories?.result?.length === 0) {
-    content = <ErrorMsg msg="No Category found!" />;
-  }
-  if (!isLoading && !isError && categories?.result?.length > 0) {
-    const category_items = categories.result;
-    content = category_items.map((item) => (
-      <li key={item._id}>
-        <a
-          onClick={() => handleCategoryRoute(item.parent)}
-          style={{ cursor: "pointer" }}
-          className={
-            router.query.category ===
-            item.parent.toLowerCase().replace("&", "").split(" ").join("-")
-              ? "active"
-              : ""
-          }
-        >
-          {item.parent} <span>{item.products.length}</span>
-        </a>
-      </li>
-    ));
-  }
+
+  const categoryEntries = Object.entries(categoriesMap);
+
   return (
-    <>
-      <div className="tp-shop-widget mb-50">
-        <h3 className="tp-shop-widget-title">Categories</h3>
-        <div className="tp-shop-widget-content">
-          <div className="tp-shop-widget-categories">
-            <ul>{content}</ul>
-          </div>
+    <div className="tp-shop-widget mb-50">
+      <h3 className="tp-shop-widget-title">Categories</h3>
+      <div className="tp-shop-widget-content">
+        <div className="tp-shop-widget-categories">
+          <ul>
+            {categoryEntries.map(([parent, count]) => {
+              const formattedSlug = parent.toLowerCase().replace("&", "").split(" ").join("-");
+              const isActive = router.query.category === formattedSlug;
+              return (
+                <li key={parent}>
+                  <a
+                    onClick={() => handleCategoryRoute(parent)}
+                    style={{ cursor: "pointer" }}
+                    className={isActive ? "active font-bold text-primary" : ""}
+                  >
+                    {parent} <span>{count}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
