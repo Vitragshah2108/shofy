@@ -17,16 +17,17 @@ if (typeof window !== "undefined") {
 const NEXT_PUBLIC_STRIPE_KEY = process.env.NEXT_PUBLIC_STRIPE_KEY || 'pk_test_51NYXCFGndYsQkAEFifIbJH64sZFMDpF7DcLYvUUN2az3VdK1M7qVPo7Z2j9rhunf3Pd0C3aFLENIxFriJWwx1P6a00lQFqaoc6';
 const stripePromise = loadStripe(NEXT_PUBLIC_STRIPE_KEY);
 const NEXT_PUBLIC_GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '159598878367-1lbpr74b8qfe0kgkccq6i7vhgkj46cs7.apps.googleusercontent.com';
-export default function App({ Component, pageProps }) {
+
+export default function App({ Component, pageProps, router }) {
   return (
     <GoogleOAuthProvider clientId={NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
       <Provider store={store}>
         <Elements stripe={stripePromise}>
           <div id="root">
-            <Component {...pageProps} />
+            <Component {...pageProps} key={router?.asPath || 'app-page'} />
           </div>
         </Elements>
       </Provider>
     </GoogleOAuthProvider>
-  )
+  );
 }
