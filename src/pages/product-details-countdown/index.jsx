@@ -10,27 +10,48 @@ import ProductDetailsBreadcrumb from '@/components/breadcrumb/product-details-br
 import ProductDetailsArea from '@/components/product-details/product-details-area';
 import PrdDetailsLoader from '@/components/loader/prd-details-loader';
 
-const ProductDetailsPageWithVideo = () => {
-  const { data: product, isLoading, isError } = useGetProductQuery("641e887d05f9ee1717e134b2");
-  // decide what to render
+import products_data from '@/data/products-data';
+
+const ProductDetailsCountdownPage = () => {
+  const countdownProductFallback = {
+    ...products_data[0],
+    offerDate: {
+      startDate: new Date().toISOString(),
+      endDate: new Date(Date.now() + 4 * 24 * 3600 * 1000).toISOString(),
+    },
+  };
+
+  const { data: product, isLoading, isError } = useGetProductQuery("641e887d05f9ee1717e134b2", {
+    skip: false,
+  });
+
+  const currentProduct = (!isError && product?.data) 
+    ? {
+        ...product.data,
+        offerDate: product.data.offerDate || countdownProductFallback.offerDate,
+      } 
+    : countdownProductFallback;
+
   let content = null;
   if (isLoading) {
     content = <PrdDetailsLoader loading={isLoading}/>;
-  }
-  if (!isLoading && isError) {
-    content = <ErrorMsg msg="There was an error" />;
-  }
-  if (!isLoading && !isError && product) {
+  } else if (currentProduct) {
     content = (
       <>
-        <ProductDetailsBreadcrumb category={product.category.name} title={product.title} />
-        <ProductDetailsArea productItem={product} />
+        <ProductDetailsBreadcrumb 
+          category={currentProduct.category?.name || currentProduct.parent || "Electronics"} 
+          title={currentProduct.title} 
+        />
+        <ProductDetailsArea productItem={currentProduct} />
       </>
     );
+  } else {
+    content = <ErrorMsg msg="Product not found" />;
   }
+
   return (
     <Wrapper>
-      <SEO pageTitle="Product Details" />
+      <SEO pageTitle={currentProduct?.title || "Product Details Countdown"} />
       <HeaderTwo style_2={true} />
       {content}
       <Footer primary_style={true} />
@@ -38,5 +59,4 @@ const ProductDetailsPageWithVideo = () => {
   );
 };
 
-export default ProductDetailsPageWithVideo;
-
+export default ProductDetailsCountdownPage;

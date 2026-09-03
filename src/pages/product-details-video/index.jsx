@@ -10,27 +10,42 @@ import ProductDetailsBreadcrumb from '@/components/breadcrumb/product-details-br
 import ProductDetailsArea from '@/components/product-details/product-details-area';
 import PrdDetailsLoader from '@/components/loader/prd-details-loader';
 
+import products_data from '@/data/products-data';
+
 const ProductDetailsPageWithVideo = () => {
-  const { data: product, isLoading, isError } = useGetProductQuery("641e887d05f9ee1717e13496");
-  // decide what to render
+  const videoProductFallback = {
+    ...products_data[0],
+    videoId: "EW4ZYb3mCZk",
+  };
+
+  const { data: product, isLoading, isError } = useGetProductQuery("641e887d05f9ee1717e13496", {
+    skip: false,
+  });
+
+  const currentProduct = (!isError && product?.data) 
+    ? { ...product.data, videoId: product.data.videoId || "EW4ZYb3mCZk" } 
+    : videoProductFallback;
+
   let content = null;
   if (isLoading) {
     content = <PrdDetailsLoader loading={isLoading}/>;
-  }
-  if (!isLoading && isError) {
-    content = <ErrorMsg msg="There was an error" />;
-  }
-  if (!isLoading && !isError && product) {
+  } else if (currentProduct) {
     content = (
       <>
-        <ProductDetailsBreadcrumb category={product.category.name} title={product.title} />
-        <ProductDetailsArea productItem={product} />
+        <ProductDetailsBreadcrumb 
+          category={currentProduct.category?.name || currentProduct.parent || "Electronics"} 
+          title={currentProduct.title} 
+        />
+        <ProductDetailsArea productItem={currentProduct} />
       </>
     );
+  } else {
+    content = <ErrorMsg msg="Product not found" />;
   }
+
   return (
     <Wrapper>
-      <SEO pageTitle="Product Details" />
+      <SEO pageTitle={currentProduct?.title || "Product Details Video"} />
       <HeaderTwo style_2={true} />
       {content}
       <Footer primary_style={true} />
@@ -39,4 +54,3 @@ const ProductDetailsPageWithVideo = () => {
 };
 
 export default ProductDetailsPageWithVideo;
-
