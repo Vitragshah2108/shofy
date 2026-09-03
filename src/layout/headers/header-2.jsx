@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 // internal
 import Menus from './header-com/menus';
 import logo from '@assets/img/logo/logo.svg';
@@ -21,6 +22,7 @@ const HeaderTwo = ({ style_2 = false }) => {
   const { quantity } = useCartInfo();
   const { sticky } = useSticky();
   const dispatch = useDispatch();
+  const router = useRouter();
   return (
     <>
       <header>
@@ -61,7 +63,7 @@ const HeaderTwo = ({ style_2 = false }) => {
                 <div className="row align-items-center">
                   <div className="col-xl-2 col-lg-5 col-md-5 col-sm-4 col-6">
                     <div className="logo">
-                      <Link href="/">
+                      <Link href="/" onClick={() => router.push('/')} className="cursor-pointer d-inline-block">
                         <Image src={logo} alt="logo" priority />
                       </Link>
                     </div>

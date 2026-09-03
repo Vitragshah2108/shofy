@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 // internal
 import Menus from "./header-com/menus";
@@ -23,6 +24,7 @@ const Header = () => {
   const { quantity } = useCartInfo();
   const { sticky } = useSticky();
   const dispatch = useDispatch();
+  const router = useRouter();
   return (
     <>
       <header>
@@ -54,8 +56,8 @@ const Header = () => {
               <div className="row align-items-center">
                 <div className="col-xl-2 col-lg-2 col-md-4 col-6">
                   <div className="logo">
-                    <Link href="/">
-                      <Image src={logo} alt="logo" />
+                    <Link href="/" onClick={() => router.push('/')} className="cursor-pointer d-inline-block">
+                      <Image src={logo} alt="logo" priority />
                     </Link>
                   </div>
                 </div>
@@ -130,8 +132,8 @@ const Header = () => {
             <div className="row align-items-center">
               <div className="col-xl-3 col-lg-3 col-md-3 col-6">
                 <div className="logo">
-                  <Link href="/">
-                    <Image src={logo} alt="logo" />
+                  <Link href="/" onClick={() => router.push('/')} className="cursor-pointer d-inline-block">
+                    <Image src={logo} alt="logo" priority />
                   </Link>
                 </div>
               </div>

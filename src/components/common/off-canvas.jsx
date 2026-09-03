@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 // internal
 import { CloseTwo } from '@/svg';
 import logo from '@assets/img/logo/logo.svg';
@@ -10,6 +11,7 @@ import MobileCategory from '@/layout/headers/header-com/mobile-category';
 import MobileMenus from './mobile-menus';
 
 const OffCanvas = ({ isOffCanvasOpen, setIsCanvasOpen,categoryType = "electronics" }) => {
+  const router = useRouter();
   const [isCategoryActive, setIsCategoryActive] = useState(false);
   const [isCurrencyActive, setIsCurrencyActive] = useState(false);
   const [isLanguageActive, setIsLanguageActive] = useState(false);
@@ -38,8 +40,8 @@ const OffCanvas = ({ isOffCanvasOpen, setIsCanvasOpen,categoryType = "electronic
           <div className="offcanvas__content">
             <div className="offcanvas__top mb-70 d-flex justify-content-between align-items-center">
               <div className="offcanvas__logo logo">
-                <Link href="/" onClick={() => setIsCanvasOpen(false)}>
-                  <Image src={logo} alt="logo" />
+                <Link href="/" onClick={() => { setIsCanvasOpen(false); router.push('/'); }} className="cursor-pointer d-inline-block">
+                  <Image src={logo} alt="logo" priority />
                 </Link>
               </div>
             </div>

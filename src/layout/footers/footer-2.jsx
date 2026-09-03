@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 // internal
 import social_data from '@/data/social-data';
 import { Email, Location } from '@/svg';
@@ -8,6 +9,7 @@ import logo from '@assets/img/logo/logo.svg';
 import pay from '@assets/img/footer/footer-pay.png';
 
 const FooterTwo = () => {
+  const router = useRouter();
   return (
     <>
       <footer>
@@ -18,8 +20,8 @@ const FooterTwo = () => {
                 <div className="col-xl-3 col-lg-3 col-md-4 col-sm-6">
                   <div className="tp-footer-widget footer-col-4-1 mb-50">
                     <div className="tp-footer-logo">
-                      <Link href="/">
-                        <Image src={logo} alt="logo" />
+                      <Link href="/" onClick={() => router.push('/')} className="cursor-pointer d-inline-block">
+                        <Image src={logo} alt="logo" priority />
                       </Link>
                     </div>
                     <div className="tp-footer-widget-content">
