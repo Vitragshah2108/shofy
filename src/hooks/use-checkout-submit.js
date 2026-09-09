@@ -12,6 +12,7 @@ import { set_coupon } from "@/redux/features/coupon/couponSlice";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import {useCreatePaymentIntentMutation,useSaveOrderMutation} from "@/redux/features/order/orderApi";
 import { useGetOfferCouponsQuery } from "@/redux/features/coupon/couponApi";
+import { getValidUserId } from "@/utils/user-helper";
 
 const useCheckoutSubmit = () => {
   // offerCoupons
@@ -50,6 +51,10 @@ const useCheckoutSubmit = () => {
   const [clientSecret, setClientSecret] = useState("");
   // showCard
   const [showCard, setShowCard] = useState(false);
+  // isStripeModalOpen
+  const [isStripeModalOpen, setIsStripeModalOpen] = useState(false);
+  // billingFormData
+  const [billingFormData, setBillingFormData] = useState(null);
   // coupon apply message
   const [couponApplyMsg,setCouponApplyMsg] = useState("");
 
@@ -108,21 +113,6 @@ const useCheckoutSubmit = () => {
     cartTotal,
   ]);
 
-  // create payment intent
-  useEffect(() => {
-    if (cartTotal) {
-      createPaymentIntent({
-        price: parseInt(cartTotal),
-      })
-        .then((data) => {
-          setClientSecret(data?.data?.clientSecret);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  }, [createPaymentIntent, cartTotal]);
-
   // handleCouponCode
   const handleCouponCode = (e) => {
     e.preventDefault();
@@ -157,9 +147,6 @@ const useCheckoutSubmit = () => {
       );
       return;
     } else {
-      // notifySuccess(
-      //   `Your Coupon ${result[0].title} is Applied on ${result[0].productType}!`
-      // );
       setCouponApplyMsg(`Your Coupon ${result[0].title} is Applied on ${result[0].productType} productType!`)
       setMinimumAmount(result[0]?.minimumAmount);
       setDiscountProductType(result[0].productType);
@@ -193,7 +180,6 @@ const useCheckoutSubmit = () => {
   // submitHandler
   const submitHandler = async (data) => {
     dispatch(set_shipping(data));
-    setIsCheckoutSubmit(true);
 
     let orderInfo = {
       name: `${data.firstName} ${data.lastName}`,
@@ -211,92 +197,41 @@ const useCheckoutSubmit = () => {
       shippingCost: shippingCost,
       discount: discountAmount,
       totalAmount: cartTotal,
-      orderNote:data.orderNote,
-      user: `${user?._id}`,
+      orderNote: data.orderNote,
+      user: getValidUserId(user?._id || user?.id),
     };
-    if (data.payment === 'Card') {
-      if (!stripe || !elements) {
-        return;
-      }
-      const card = elements.getElement(CardElement);
-      if (card == null) {
-        return;
-      }
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
-        type: 'card',
-        card: card,
-      });
-      if (error && !paymentMethod) {
-        setCardError(error.message);
-        setIsCheckoutSubmit(false);
-      } else {
-        setCardError('');
-        const orderData = {
-          ...orderInfo,
-          cardInfo: paymentMethod,
-        };
 
-       return handlePaymentWithStripe(orderData);
-      }
+    if (data.payment === 'Card') {
+      // Store current valid form state and trigger Stripe Checkout Modal
+      setBillingFormData({
+        ...data,
+        shippingOption: data.shippingOption,
+        orderInfo,
+      });
+      setIsStripeModalOpen(true);
+      return;
     }
+
     if (data.payment === 'COD') {
+      setIsCheckoutSubmit(true);
       saveOrder({
         ...orderInfo
-      }).then(res => {
-        if(res?.error){
-        }
-        else {
-          localStorage.removeItem("cart_products")
+      }).then((res) => {
+        if (res?.error) {
+          notifyError(res?.error?.data?.message || "Failed to place order.");
+          setIsCheckoutSubmit(false);
+        } else {
+          localStorage.removeItem("cart_products");
           localStorage.removeItem("couponInfo");
-          setIsCheckoutSubmit(false)
+          localStorage.removeItem("shipping_info");
+          setIsCheckoutSubmit(false);
           notifySuccess("Your Order Confirmed!");
           router.push(`/order/${res.data?.order?._id}`);
         }
-      })
-    }
-  };
-
-  // handlePaymentWithStripe
-  const handlePaymentWithStripe = async (order) => {
-    try {
-      const {paymentIntent, error:intentErr} = await stripe.confirmCardPayment(
-        clientSecret,
-        {
-          payment_method: {
-            card: elements.getElement(CardElement),
-            billing_details: {
-              name: user?.firstName,
-              email: user?.email,
-            },
-          },
-        },
-      );
-      if (intentErr) {
-        notifyError(intentErr.message);
-      } else {
-        // notifySuccess("Your payment processed successfully");
-      }
-
-      const orderData = {
-        ...order,
-        paymentIntent,
-      };
-
-      saveOrder({
-        ...orderData
-      })
-      .then((result) => {
-          if(result?.error){
-          }
-          else {
-            localStorage.removeItem("couponInfo");
-            notifySuccess("Your Order Confirmed!");
-            router.push(`/order/${result.data?.order?._id}`);
-          }
-        })
-       } 
-    catch (err) {
-      console.log(err);
+      }).catch((err) => {
+        notifyError("Failed to place order.");
+        setIsCheckoutSubmit(false);
+      });
     }
   };
 
@@ -314,16 +249,20 @@ const useCheckoutSubmit = () => {
     register,
     errors,
     cardError,
+    setCardError,
     submitHandler,
     stripe,
     handleSubmit,
     clientSecret,
     setClientSecret,
     cartTotal,
-    isCheckoutSubmit,
     couponApplyMsg,
     showCard,
     setShowCard,
+    isStripeModalOpen,
+    setIsStripeModalOpen,
+    billingFormData,
+    cart_products,
   };
 };
 

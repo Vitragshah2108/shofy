@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { CardElement } from "@stripe/react-stripe-js";
 import { useSelector } from "react-redux";
 // internal
 import useCartInfo from "@/hooks/use-cart-info";
 import ErrorMsg from "../common/error-msg";
+import StripePaymentModal from "./stripe-payment-modal";
 
 const CheckoutOrderArea = ({ checkoutData }) => {
   const {
@@ -11,13 +11,15 @@ const CheckoutOrderArea = ({ checkoutData }) => {
     cartTotal = 0,
     stripe,
     isCheckoutSubmit,
-    clientSecret,
     register,
     errors,
     showCard,
     setShowCard,
     shippingCost,
-    discountAmount
+    discountAmount,
+    isStripeModalOpen,
+    setIsStripeModalOpen,
+    billingFormData,
   } = checkoutData;
   const { cart_products } = useSelector((state) => state.cart);
   const { total } = useCartInfo();
@@ -115,33 +117,32 @@ const CheckoutOrderArea = ({ checkoutData }) => {
             {...register(`payment`, {
               required: `Payment Option is required!`,
             })}
+            onClick={() => setShowCard(true)}
+            onChange={(e) => {
+              register(`payment`).onChange(e);
+              setShowCard(true);
+            }}
             type="radio"
             id="back_transfer"
             name="payment"
             value="Card"
           />
-          <label onClick={() => setShowCard(true)} htmlFor="back_transfer" data-bs-toggle="direct-bank-transfer">
-            Credit Card
+          <label onClick={() => setShowCard(true)} htmlFor="back_transfer">
+            Credit Card (Stripe Modal)
           </label>
           {showCard && (
-            <div className="direct-bank-transfer">
-              <div className="payment_card">
-                <CardElement
-                  options={{
-                    style: {
-                      base: {
-                        fontSize: "16px",
-                        color: "#424770",
-                        "::placeholder": {
-                          color: "#aab7c4",
-                        },
-                      },
-                      invalid: {
-                        color: "#9e2146",
-                      },
-                    },
-                  }}
-                />
+            <div className="direct-bank-transfer p-3 rounded-3 mt-2 mb-2" style={{ backgroundColor: "#f0fdf4", border: "1px solid #bbf7d0" }}>
+              <div className="d-flex align-items-center gap-2 mb-2 text-success">
+                <i className="fa-solid fa-circle-check fs-6"></i>
+                <span className="fw-semibold" style={{ fontSize: "13.5px" }}>Stripe Modal Checkout Active</span>
+              </div>
+              <p className="mb-2 text-muted" style={{ fontSize: "12.5px", lineHeight: "1.4" }}>
+                Clicking <strong>Place Order</strong> below will open the dedicated Stripe Payment Modal for instant card testing.
+              </p>
+              <div className="stripe-test-badge">
+                <small style={{ fontSize: "12px", color: "#15803d" }}>
+                  <strong>Test Card:</strong> <code>4242 4242 4242 4242</code>
+                </small>
               </div>
             </div>
           )}
@@ -153,12 +154,18 @@ const CheckoutOrderArea = ({ checkoutData }) => {
               required: `Payment Option is required!`,
             })}
             onClick={() => setShowCard(false)}
+            onChange={(e) => {
+              register(`payment`).onChange(e);
+              setShowCard(false);
+            }}
             type="radio"
             id="cod"
             name="payment"
             value="COD"
           />
-          <label htmlFor="cod">Cash on Delivery</label>
+          <label onClick={() => setShowCard(false)} htmlFor="cod">
+            Cash on Delivery
+          </label>
           <ErrorMsg msg={errors?.payment?.message} />
         </div>
       </div>
@@ -169,9 +176,21 @@ const CheckoutOrderArea = ({ checkoutData }) => {
           disabled={!stripe || isCheckoutSubmit}
           className="tp-checkout-btn w-100"
         >
-          Place Order
+          {isCheckoutSubmit ? "Processing Order..." : "Place Order"}
         </button>
       </div>
+
+      {/* Dedicated Stripe Modal */}
+      <StripePaymentModal
+        isOpen={isStripeModalOpen}
+        onClose={() => setIsStripeModalOpen(false)}
+        billingData={billingFormData}
+        cartTotal={cartTotal}
+        total={total}
+        shippingCost={shippingCost}
+        discountAmount={discountAmount}
+        cart_products={cart_products}
+      />
     </div>
   );
 };
